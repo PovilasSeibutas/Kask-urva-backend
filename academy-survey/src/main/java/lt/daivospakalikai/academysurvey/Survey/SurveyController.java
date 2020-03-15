@@ -22,12 +22,8 @@ public class SurveyController {
 
   private static Logger log = LoggerFactory.getLogger(SurveyController.class);
 
-  private SurveyService surveyService;
-
   @Autowired
-  public SurveyController(SurveyService surveyService) {
-    this.surveyService = surveyService;
-  }
+  private SurveyService surveyService;
 
   @GetMapping
   public ResponseEntity<List<Survey>> getSurveys() {

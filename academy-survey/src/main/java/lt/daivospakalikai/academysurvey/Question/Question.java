@@ -18,7 +18,6 @@ import javax.validation.constraints.Size;
 import lt.daivospakalikai.academysurvey.Answer.Answer;
 
 @Entity
-@Table(name = "question")
 public class Question implements Serializable {
 
   private static final long serialVersionUID = 1L;

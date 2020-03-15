@@ -17,10 +17,9 @@ import javax.validation.constraints.NotNull;
 import lt.daivospakalikai.academysurvey.Answer.Answer;
 
 @Entity
-@Table(name = "survey")
 public class Survey implements Serializable {
 
-  private static final long serialVersionUID = -2268562508199413550L;
+  private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)

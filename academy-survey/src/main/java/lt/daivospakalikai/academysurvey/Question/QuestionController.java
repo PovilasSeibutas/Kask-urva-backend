@@ -20,12 +20,8 @@ public class QuestionController {
 
   private static Logger log = LoggerFactory.getLogger(QuestionController.class);
 
-  private QuestionService questionService;
-
   @Autowired
-  public QuestionController(QuestionService questionService) {
-    this.questionService = questionService;
-  }
+  private QuestionService questionService;
 
   @GetMapping
   public ResponseEntity<List<Question>> getQuestions() {

@@ -29,12 +29,6 @@ public class AnswerController {
   @Autowired
   private SurveyService surveyService;
 
-//  @Autowired
-//  public AnswerController(AnswerService answerService) {
-//
-//    this.answerService = answerService;
-//  }
-
   @GetMapping
   public ResponseEntity<List<Answer>> getAnswers() {
     List<Answer> list = answerService.getAllAnswers();
