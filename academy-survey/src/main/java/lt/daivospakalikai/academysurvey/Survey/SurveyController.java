@@ -44,8 +44,6 @@ public class SurveyController {
   @PostMapping(consumes = "application/json")
   public void saveContactByPid(@RequestBody Survey survey) {
     surveyService.saveSurvey(survey);
-
-
   }
 
 }

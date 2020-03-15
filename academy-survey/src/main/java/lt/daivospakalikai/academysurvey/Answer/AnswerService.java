@@ -1,7 +1,6 @@
 package lt.daivospakalikai.academysurvey.Answer;
 
 import java.util.List;
-import java.util.Set;
 
 public interface AnswerService {
 
@@ -9,5 +8,5 @@ public interface AnswerService {
 
   void saveAnswer(Answer answer);
 
-  void saveAllAnswers(Set<Answer> answerSet);
+  void saveAllAnswers(List<Answer> answerList);
 }

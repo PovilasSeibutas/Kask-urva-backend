@@ -1,6 +1,7 @@
 package lt.daivospakalikai.academysurvey.Answer;
 
 import java.util.List;
+import lt.daivospakalikai.academysurvey.Survey.Survey;
 import lt.daivospakalikai.academysurvey.Survey.SurveyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +29,11 @@ public class AnswerController {
   @Autowired
   private SurveyService surveyService;
 
-  @Autowired
-  public AnswerController(AnswerService answerService) {
-
-    this.answerService = answerService;
-  }
+//  @Autowired
+//  public AnswerController(AnswerService answerService) {
+//
+//    this.answerService = answerService;
+//  }
 
   @GetMapping
   public ResponseEntity<List<Answer>> getAnswers() {
@@ -49,25 +50,13 @@ public class AnswerController {
 
   @Transactional
   @PostMapping(path = "saveAnswers", consumes = "application/json")
-  public void saveAllAnswers(@RequestBody AnswerWrapper answerWrapper) {
-//    System.out.println("ANSWER SET: " + answerWrapper.getAnswerSet().toString());
-//      for (Answer a:answerWrapper.getAnswerSet()){
-//        saveAnswer(a);
-//        System.out.println("ANSWER: " + a.toString());
-//      }
-    answerService.saveAllAnswers(answerWrapper.getAnswerSet());
+  public void saveAllAnswers(@RequestBody List<Answer> answerList) {
+    Survey surveyId = answerList.get(0).getSurveyId();
+    surveyService.saveSurvey(surveyId);
+    for (Answer a : answerList) {
+      a.setSurveyId(surveyId);
+    }
+    answerService.saveAllAnswers(answerList);
   }
-
-//  @Transactional
-//  @PostMapping(path = "saveAnswers", consumes = "application/json")
-//  public Set<Answer> saveAllAnswers(@RequestBody Set<Answer> answerSet) {
-//    Set<Answer> answerResponse = (Set<Answer>) answerService.saveAllAnswers(answerSet);
-//    return answerResponse;
-//  }
-
-//  public List<Student> saveAllStudents(@RequestBody List<Student> studentList) {
-//    List<Student> studentResponse = (List<Student>) studentService.saveAllStudent(studentList);
-//    return studentResponse;
-//  }
 
 }

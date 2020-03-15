@@ -2,6 +2,7 @@ package lt.daivospakalikai.academysurvey.Survey;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -83,22 +84,23 @@ public class Survey implements Serializable {
   }
 
   @Override
-  public int hashCode() {
-    int hash = 0;
-    hash += (id != null ? id.hashCode() : 0);
-    return hash;
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Survey survey = (Survey) o;
+    return status == survey.status &&
+        Objects.equals(id, survey.id) &&
+        Objects.equals(timeStamp, survey.timeStamp) &&
+        Objects.equals(answerSet, survey.answerSet);
   }
 
   @Override
-  public boolean equals(Object object) {
-    if (!(object instanceof Survey)) {
-      return false;
-    }
-    Survey other = (Survey) object;
-    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-      return false;
-    }
-    return true;
+  public int hashCode() {
+    return Objects.hash(id, timeStamp, status, answerSet);
   }
 
   @Override
