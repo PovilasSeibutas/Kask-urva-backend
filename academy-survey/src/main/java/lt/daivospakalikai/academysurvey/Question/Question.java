@@ -2,8 +2,8 @@ package lt.daivospakalikai.academysurvey.Question;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 import lt.daivospakalikai.academysurvey.Answer.Answer;
 
 @Entity
+@Table(name = "question")
 public class Question implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -38,7 +39,7 @@ public class Question implements Serializable {
   private String question;
   @JsonIgnore
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
-  private Set<Answer> answerSet;
+  private List<Answer> answerList;
 
   public Question() {
   }
@@ -77,12 +78,12 @@ public class Question implements Serializable {
     this.question = question;
   }
 
-  public Set<Answer> getAnswerSet() {
-    return answerSet;
+  public List<Answer> getAnswerList() {
+    return answerList;
   }
 
-  public void setAnswerSet(Set<Answer> answerSet) {
-    this.answerSet = answerSet;
+  public void setAnswerList(List<Answer> answerList) {
+    this.answerList = answerList;
   }
 
   @Override
@@ -97,12 +98,12 @@ public class Question implements Serializable {
     return Objects.equals(id, question1.id) &&
         Objects.equals(type, question1.type) &&
         Objects.equals(question, question1.question) &&
-        Objects.equals(answerSet, question1.answerSet);
+        Objects.equals(answerList, question1.answerList);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, type, question, answerSet);
+    return Objects.hash(id, type, question, answerList);
   }
 
   @Override
@@ -111,7 +112,7 @@ public class Question implements Serializable {
         "id=" + id +
         ", type='" + type + '\'' +
         ", question='" + question + '\'' +
-        ", answerSet=" + answerSet +
+        ", answerSet=" + answerList +
         '}';
   }
 }

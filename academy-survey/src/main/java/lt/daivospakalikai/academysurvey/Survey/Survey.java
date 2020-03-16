@@ -2,8 +2,8 @@ package lt.daivospakalikai.academysurvey.Survey;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import lt.daivospakalikai.academysurvey.Answer.Answer;
 
 @Entity
+@Table(name = "survey")
 public class Survey implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -35,7 +36,7 @@ public class Survey implements Serializable {
   private int status;
   @JsonIgnore
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
-  private Set<Answer> answerSet;
+  private List<Answer> answerList;
 
   public Survey() {
   }
@@ -74,12 +75,12 @@ public class Survey implements Serializable {
     this.status = status;
   }
 
-  public Set<Answer> getAnswerSet() {
-    return answerSet;
+  public List<Answer> getAnswerList() {
+    return answerList;
   }
 
-  public void setAnswerSet(Set<Answer> answerSet) {
-    this.answerSet = answerSet;
+  public void setAnswerSet(List<Answer> answerList) {
+    this.answerList = answerList;
   }
 
   @Override
@@ -94,12 +95,12 @@ public class Survey implements Serializable {
     return status == survey.status &&
         Objects.equals(id, survey.id) &&
         Objects.equals(timeStamp, survey.timeStamp) &&
-        Objects.equals(answerSet, survey.answerSet);
+        Objects.equals(answerList, survey.answerList);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timeStamp, status, answerSet);
+    return Objects.hash(id, timeStamp, status, answerList);
   }
 
   @Override
@@ -108,7 +109,7 @@ public class Survey implements Serializable {
         "id=" + id +
         ", timeStamp=" + timeStamp +
         ", status=" + status +
-        ", answerSet=" + answerSet +
+        ", answerSet=" + answerList +
         '}';
   }
 }
