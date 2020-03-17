@@ -39,11 +39,6 @@ public class SurveyController {
     List<Answer> answerList = surveyService.getAnswersBySurveyId(id);
     return new ResponseEntity<List<Answer>>(answerList, HttpStatus.OK);
   }
-  
-  @GetMapping("/submissions")
-  public List<Survey> getSurveyss() {
-    return surveyRepository.findByIdarea();
-  }
 
   @PostMapping(consumes = "application/json")
   public void saveContactByPid(@RequestBody Survey survey) {

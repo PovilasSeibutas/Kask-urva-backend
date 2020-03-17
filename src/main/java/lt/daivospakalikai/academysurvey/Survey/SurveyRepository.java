@@ -7,7 +7,4 @@ import java.util.List;
 
 public interface SurveyRepository extends JpaRepository<Survey, Integer> {
 
-    @Query("select survey.* from survey join answer on answer.survey_id = survey.id join question on question.id = answer.question_id")
-    List<Survey> findByIdarea();
-
 }
