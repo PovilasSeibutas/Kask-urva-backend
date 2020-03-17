@@ -25,6 +25,9 @@ public class SurveyController {
   @Autowired
   private SurveyService surveyService;
 
+  @Autowired
+  private SurveyRepository surveyRepository;
+
   @GetMapping
   public ResponseEntity<List<Survey>> getSurveys() {
     List<Survey> list = surveyService.getAllSurveys();
@@ -35,6 +38,11 @@ public class SurveyController {
   public ResponseEntity<List<Answer>> getAnswersBySurveyId(@PathVariable Integer id) {
     List<Answer> answerList = surveyService.getAnswersBySurveyId(id);
     return new ResponseEntity<List<Answer>>(answerList, HttpStatus.OK);
+  }
+  
+  @GetMapping("/submissions")
+  public List<Survey> getSurveyss() {
+    return surveyRepository.findByIdarea();
   }
 
   @PostMapping(consumes = "application/json")
