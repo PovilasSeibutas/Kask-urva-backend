@@ -6,7 +6,8 @@ build/
 !**/src/test/**
 
 native/
-wrapper/
+/wrapper/
+/academy-survey/
 daemon/
 
 ### STS ###
