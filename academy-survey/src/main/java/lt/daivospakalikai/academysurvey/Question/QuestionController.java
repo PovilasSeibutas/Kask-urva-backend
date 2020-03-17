@@ -20,13 +20,8 @@ public class QuestionController {
 
   private static Logger log = LoggerFactory.getLogger(QuestionController.class);
 
-  private QuestionService questionService;
-
   @Autowired
-  public QuestionController(QuestionService questionService) {
-
-    this.questionService = questionService;
-  }
+  private QuestionService questionService;
 
   @GetMapping
   public ResponseEntity<List<Question>> getQuestions() {
@@ -34,8 +29,8 @@ public class QuestionController {
     return new ResponseEntity<List<Question>>(list, HttpStatus.OK);
   }
 
-  @PostMapping (consumes = "application/json")
-  public void saveQuestion (@RequestBody Question question) {
+  @PostMapping(consumes = "application/json")
+  public void saveQuestion(@RequestBody Question question) {
     questionService.saveQuestion(question);
   }
 }

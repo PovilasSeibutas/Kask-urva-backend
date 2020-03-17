@@ -2,7 +2,8 @@ package lt.daivospakalikai.academysurvey.Survey;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,7 +20,7 @@ import lt.daivospakalikai.academysurvey.Answer.Answer;
 @Table(name = "survey")
 public class Survey implements Serializable {
 
-  private static final long serialVersionUID = -2268562508199413550L;
+  private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
@@ -35,7 +36,7 @@ public class Survey implements Serializable {
   private int status;
   @JsonIgnore
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
-  private Set<Answer> answerSet;
+  private List<Answer> answerList;
 
   public Survey() {
   }
@@ -74,31 +75,32 @@ public class Survey implements Serializable {
     this.status = status;
   }
 
-  public Set<Answer> getAnswerSet() {
-    return answerSet;
+  public List<Answer> getAnswerList() {
+    return answerList;
   }
 
-  public void setAnswerSet(Set<Answer> answerSet) {
-    this.answerSet = answerSet;
+  public void setAnswerSet(List<Answer> answerList) {
+    this.answerList = answerList;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Survey survey = (Survey) o;
+    return status == survey.status &&
+        Objects.equals(id, survey.id) &&
+        Objects.equals(timeStamp, survey.timeStamp) &&
+        Objects.equals(answerList, survey.answerList);
   }
 
   @Override
   public int hashCode() {
-    int hash = 0;
-    hash += (id != null ? id.hashCode() : 0);
-    return hash;
-  }
-
-  @Override
-  public boolean equals(Object object) {
-    if (!(object instanceof Survey)) {
-      return false;
-    }
-    Survey other = (Survey) object;
-    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-      return false;
-    }
-    return true;
+    return Objects.hash(id, timeStamp, status, answerList);
   }
 
   @Override
@@ -107,7 +109,7 @@ public class Survey implements Serializable {
         "id=" + id +
         ", timeStamp=" + timeStamp +
         ", status=" + status +
-        ", answerSet=" + answerSet +
+        ", answerSet=" + answerList +
         '}';
   }
 }

@@ -1,6 +1,5 @@
 package lt.daivospakalikai.academysurvey.Answer;
 
-import java.util.Date;
 import java.util.List;
 import lt.daivospakalikai.academysurvey.Survey.Survey;
 import lt.daivospakalikai.academysurvey.Survey.SurveyService;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,15 +23,11 @@ public class AnswerController {
 
   private static Logger log = LoggerFactory.getLogger(AnswerController.class);
 
+  @Autowired
   private AnswerService answerService;
 
-  private  SurveyService surveyService;
-
   @Autowired
-  public AnswerController(AnswerService answerService) {
-
-    this.answerService = answerService;
-  }
+  private SurveyService surveyService;
 
   @GetMapping
   public ResponseEntity<List<Answer>> getAnswers() {
@@ -42,9 +36,21 @@ public class AnswerController {
   }
 
   @Transactional
-  @PostMapping (consumes = "application/json")
-  public void saveAnswer (@RequestBody Answer answer){
+  @PostMapping(consumes = "application/json")
+  public void saveAnswer(@RequestBody Answer answer) {
+    surveyService.saveSurvey(answer.getSurveyId());
     answerService.saveAnswer(answer);
+  }
+
+  @Transactional
+  @PostMapping(path = "saveAnswers", consumes = "application/json")
+  public void saveAllAnswers(@RequestBody List<Answer> answerList) {
+    Survey surveyId = answerList.get(0).getSurveyId();
+    surveyService.saveSurvey(surveyId);
+    for (Answer a : answerList) {
+      a.setSurveyId(surveyId);
+    }
+    answerService.saveAllAnswers(answerList);
   }
 
 }

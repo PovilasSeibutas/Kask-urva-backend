@@ -6,5 +6,7 @@ public interface AnswerService {
 
   List<Answer> getAllAnswers();
 
-  void  saveAnswer(Answer answer);
+  void saveAnswer(Answer answer);
+
+  void saveAllAnswers(List<Answer> answerList);
 }

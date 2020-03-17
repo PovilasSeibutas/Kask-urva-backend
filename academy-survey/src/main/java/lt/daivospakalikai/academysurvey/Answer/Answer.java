@@ -1,7 +1,7 @@
 package lt.daivospakalikai.academysurvey.Answer;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -83,23 +83,25 @@ public class Answer implements Serializable {
   }
 
   @Override
-  public int hashCode() {
-    int hash = 0;
-    hash += (id != null ? id.hashCode() : 0);
-    return hash;
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Answer answer1 = (Answer) o;
+    return Objects.equals(id, answer1.id) &&
+        Objects.equals(answer, answer1.answer) &&
+        Objects.equals(questionId, answer1.questionId) &&
+        Objects.equals(surveyId, answer1.surveyId);
   }
 
   @Override
-  public boolean equals(Object object) {
-    if (!(object instanceof Answer)) {
-      return false;
-    }
-    Answer other = (Answer) object;
-    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-      return false;
-    }
-    return true;
+  public int hashCode() {
+    return Objects.hash(id, answer, questionId, surveyId);
   }
+
 
   @Override
   public String toString() {
