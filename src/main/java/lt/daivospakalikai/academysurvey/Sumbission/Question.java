@@ -6,8 +6,6 @@ import java.util.Objects;
 @ApiModel("PackageSubmissionQuestion")
 class Question {
 
-  private Integer id;
-
   private String question;
 
   private Answer answer;
@@ -17,17 +15,8 @@ class Question {
 
   public Question(Integer id, String question,
       Answer answer) {
-    this.id = id;
     this.question = question;
     this.answer = answer;
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
   }
 
   public String getQuestion() {
@@ -55,21 +44,19 @@ class Question {
       return false;
     }
     Question question1 = (Question) o;
-    return Objects.equals(id, question1.id) &&
-        Objects.equals(question, question1.question) &&
+    return Objects.equals(question, question1.question) &&
         Objects.equals(answer, question1.answer);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, question, answer);
+    return Objects.hash(question, answer);
   }
 
   @Override
   public String toString() {
     return "Question{" +
-        "id=" + id +
-        ", question='" + question + '\'' +
+        "question='" + question + '\'' +
         ", answer=" + answer +
         '}';
   }
