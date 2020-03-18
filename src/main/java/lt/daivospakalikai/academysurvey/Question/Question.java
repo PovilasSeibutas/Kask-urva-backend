@@ -34,11 +34,10 @@ public class Question implements Serializable {
   private String type;
   @Basic(optional = false)
   @NotNull
-  @Size(min = 1, max = 45)
   @Column(name = "question")
   private String question;
   @JsonIgnore
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
   private List<Answer> answerList;
 
   public Question() {

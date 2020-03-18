@@ -35,7 +35,7 @@ public class Survey implements Serializable {
   @Column(name = "status")
   private int status;
   @JsonIgnore
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "survey")
   private List<Answer> answerList;
 
   public Survey() {

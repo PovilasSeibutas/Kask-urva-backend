@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lt.daivospakalikai.academysurvey.Question.Question;
 import lt.daivospakalikai.academysurvey.Survey.Survey;
 
@@ -28,15 +27,14 @@ public class Answer implements Serializable {
   private Integer id;
   @Basic(optional = false)
   @NotNull
-  @Size(min = 1, max = 45)
   @Column(name = "answer")
   private String answer;
   @JoinColumn(name = "question_id", referencedColumnName = "id")
   @ManyToOne(optional = false)
-  private Question questionId;
+  private Question question;
   @JoinColumn(name = "survey_id", referencedColumnName = "id")
   @ManyToOne(optional = false)
-  private Survey surveyId;
+  private Survey survey;
 
   public Answer() {
   }
@@ -66,20 +64,20 @@ public class Answer implements Serializable {
     this.answer = answer;
   }
 
-  public Question getQuestionId() {
-    return questionId;
+  public Question getQuestion() {
+    return question;
   }
 
-  public void setQuestionId(Question questionId) {
-    this.questionId = questionId;
+  public void setQuestion(Question question) {
+    this.question = question;
   }
 
-  public Survey getSurveyId() {
-    return surveyId;
+  public Survey getSurvey() {
+    return survey;
   }
 
-  public void setSurveyId(Survey surveyId) {
-    this.surveyId = surveyId;
+  public void setSurvey(Survey survey) {
+    this.survey = survey;
   }
 
   @Override
@@ -93,13 +91,13 @@ public class Answer implements Serializable {
     Answer answer1 = (Answer) o;
     return Objects.equals(id, answer1.id) &&
         Objects.equals(answer, answer1.answer) &&
-        Objects.equals(questionId, answer1.questionId) &&
-        Objects.equals(surveyId, answer1.surveyId);
+        Objects.equals(question, answer1.question) &&
+        Objects.equals(survey, answer1.survey);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, answer, questionId, surveyId);
+    return Objects.hash(id, answer, question, survey);
   }
 
 
@@ -108,8 +106,8 @@ public class Answer implements Serializable {
     return "Answer{" +
         "id=" + id +
         ", answer='" + answer + '\'' +
-        ", questionId=" + questionId +
-        ", surveyId=" + surveyId +
+        ", question=" + question +
+        ", survey=" + survey +
         '}';
   }
 }

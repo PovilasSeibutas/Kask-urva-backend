@@ -7,12 +7,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnswerServiceImp implements AnswerService {
 
-  private AnswerRepository answerRepository;
-
   @Autowired
-  private AnswerServiceImp(AnswerRepository answerRepository) {
-    this.answerRepository = answerRepository;
-  }
+  private AnswerRepository answerRepository;
 
   @Override
   public List<Answer> getAllAnswers() {

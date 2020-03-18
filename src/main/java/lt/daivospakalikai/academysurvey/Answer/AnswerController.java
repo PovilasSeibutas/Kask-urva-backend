@@ -38,17 +38,17 @@ public class AnswerController {
   @Transactional
   @PostMapping(consumes = "application/json")
   public void saveAnswer(@RequestBody Answer answer) {
-    surveyService.saveSurvey(answer.getSurveyId());
+    surveyService.saveSurvey(answer.getSurvey());
     answerService.saveAnswer(answer);
   }
 
   @Transactional
   @PostMapping(path = "saveAnswers", consumes = "application/json")
   public void saveAllAnswers(@RequestBody List<Answer> answerList) {
-    Survey surveyId = answerList.get(0).getSurveyId();
+    Survey surveyId = answerList.get(0).getSurvey();
     surveyService.saveSurvey(surveyId);
     for (Answer a : answerList) {
-      a.setSurveyId(surveyId);
+      a.setSurvey(surveyId);
     }
     answerService.saveAllAnswers(answerList);
   }
