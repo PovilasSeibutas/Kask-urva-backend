@@ -29,10 +29,10 @@ public class SubmissionServiceImp implements SubmissionService {
         Question submissionQuestion = new Question();
         Answer submissionAnswer = new Answer();
 
-//        submissionAnswer.setId(a.getId());
+//        submissionAnswer.setQuestionId(a.getQuestionId());
         submissionAnswer.setAnswer(a.getAnswer());
 
-//        submissionQuestion.setId(a.getQuestion().getId());
+//        submissionQuestion.setQuestionId(a.getQuestion().getQuestionId());
         submissionQuestion.setQuestion(a.getQuestion().getQuestion());
         submissionQuestion.setAnswer(submissionAnswer);
 
