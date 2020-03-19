@@ -26,9 +26,6 @@ public class AnswerController {
   @Autowired
   private AnswerService answerService;
 
-  @Autowired
-  private SurveyService surveyService;
-
   @GetMapping
   public ResponseEntity<List<Answer>> getAnswers() {
     List<Answer> list = answerService.getAllAnswers();
@@ -38,18 +35,12 @@ public class AnswerController {
   @Transactional
   @PostMapping(consumes = "application/json")
   public void saveAnswer(@RequestBody Answer answer) {
-    surveyService.saveSurvey(answer.getSurvey());
     answerService.saveAnswer(answer);
   }
 
   @Transactional
   @PostMapping(path = "saveAnswers", consumes = "application/json")
   public void saveAllAnswers(@RequestBody List<Answer> answerList) {
-    Survey surveyId = answerList.get(0).getSurvey();
-    surveyService.saveSurvey(surveyId);
-    for (Answer a : answerList) {
-      a.setSurvey(surveyId);
-    }
     answerService.saveAllAnswers(answerList);
   }
 
