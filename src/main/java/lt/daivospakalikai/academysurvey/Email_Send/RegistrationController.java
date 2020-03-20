@@ -1,3 +1,4 @@
+/*
 package lt.daivospakalikai.academysurvey.Email_Send;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,3 +29,4 @@ public class RegistrationController {
     }
 }
 
+*/
