@@ -6,6 +6,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class NotificationServiceImp implements NotificationService {
     private JavaMailSender javaMailSender;
@@ -15,13 +16,13 @@ public class NotificationServiceImp implements NotificationService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendNotification(Admin admin) {
+    public void sendNotification(String[] emailAddress, String notificationSubject, String notificationText) {
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(admin.getEmail());
-        mail.setFrom("steelexx1997@gmail.com");
-        mail.setSubject("IT Akademija: Nauja aplikacija!");
-        mail.setText("Užregistruota nauja aplikacija į IT Akademiją. Ją galite peržiūrėti adresu: www.localhost4200/auth");
+        mail.setTo(emailAddress);
+        mail.setFrom("itacademyvilnius@gmail.com");
+        mail.setSubject(notificationSubject);
+        mail.setText(notificationText);
 
-        javaMailSender.send(mail);
+                javaMailSender.send(mail);
     }
 }

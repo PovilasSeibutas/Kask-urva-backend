@@ -1,34 +1,24 @@
 package lt.daivospakalikai.academysurvey.Email_Send;
 
+import java.util.ArrayList;
+
 public class Admin {
-    private String name;
-    private String surname;
-    private String email;
 
-    public Admin() {
+    public ArrayList<String> emailProcess(AdminMails[] adminMails) {
+        ArrayList<String> correctEmails = new ArrayList<String>();
+        for (AdminMails adminEmail : adminMails) {
+            String email = adminEmail.toString();
+            String correctEmail = email.replace("at","@");
+            correctEmail = correctEmail.replace("dot", ".");
+            correctEmail = correctEmail.replace("dot", ".");
+            correctEmails.add(correctEmail);
+        }
+        return correctEmails;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getEmail() {
-        return email;
+    public String[] getAdminEmails(ArrayList<String> list) {
+        String[] listArray = new String[list.size()];
+        listArray = list.toArray(listArray);
+        return listArray;
     }
 }

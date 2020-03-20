@@ -1,5 +1,5 @@
 package lt.daivospakalikai.academysurvey.Email_Send;
 
 public interface NotificationService {
-    void sendNotification(Admin admin);
+    void sendNotification(String[] emailAddress, String notificationSubject, String notificationText);
 }
