@@ -5,6 +5,11 @@ build/
 !**/src/main/**
 !**/src/test/**
 
+native/
+/wrapper/
+/academy-survey/
+daemon/
+
 ### STS ###
 .apt_generated
 .classpath
