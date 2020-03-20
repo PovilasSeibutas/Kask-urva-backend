@@ -11,9 +11,8 @@ public class SurveyServiceImp implements SurveyService {
   private SurveyRepository surveyRepository;
 
   @Override
-  public void saveSurvey(Survey survey) {
-    survey.setTimeStamp(new Date().getTime() / 1000);
-    surveyRepository.save(survey);
+  public Integer createSurvey() {
+    return surveyRepository.save(new Survey(new Date().getTime() / 1000)).getId();
   }
 
 }

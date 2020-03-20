@@ -22,16 +22,8 @@ public class Submission {
     return id;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
   public List<Answer> getAnswers() {
     return answers;
-  }
-
-  public void setAnswers(List<Answer> answers) {
-    this.answers = answers;
   }
 
   @Override

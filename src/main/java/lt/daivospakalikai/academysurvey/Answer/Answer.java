@@ -52,32 +52,16 @@ public class Answer implements Serializable {
     return id;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
   public String getAnswer() {
     return answer;
-  }
-
-  public void setAnswer(String answer) {
-    this.answer = answer;
   }
 
   public Question getQuestion() {
     return question;
   }
 
-  public void setQuestion(Question question) {
-    this.question = question;
-  }
-
   public Survey getSurvey() {
     return survey;
-  }
-
-  public void setSurvey(Survey survey) {
-    this.survey = survey;
   }
 
   @Override
