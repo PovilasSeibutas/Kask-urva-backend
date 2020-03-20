@@ -1,11 +1,8 @@
-package lt.daivospakalikai.academysurvey.Sub;
+package lt.daivospakalikai.academysurvey.Submission;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class Sub implements Serializable {
-
-  private static final long serialVersionUID = 1L;
+public class Sub {
 
   private Integer id;
   private Integer questionId;

@@ -1,24 +1,26 @@
-package lt.daivospakalikai.academysurvey.Sub;
+package lt.daivospakalikai.academysurvey.Submission;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 import java.util.Objects;
 
-public class Answer {
+@ApiModel("PackageSubAnswer")
+class Answer {
 
   private Integer questionId;
-
   private String question;
-
+  @JsonIgnore
   private Integer answerId;
-
   private String answer;
-
 
   public Answer() {
   }
 
-  public Answer(Integer questionId, String question) {
+  public Answer(Integer questionId, String question, Integer answerId, String answer) {
     this.questionId = questionId;
     this.question = question;
+    this.answerId = answerId;
+    this.answer = answer;
   }
 
   public Integer getQuestionId() {
@@ -73,5 +75,13 @@ public class Answer {
     return Objects.hash(questionId, question, answerId, answer);
   }
 
-
+  @Override
+  public String toString() {
+    return "Answer{" +
+        "questionId=" + questionId +
+        ", question='" + question + '\'' +
+        ", answerId=" + answerId +
+        ", answer='" + answer + '\'' +
+        '}';
+  }
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/questions")
+@RequestMapping("/question")
 public class QuestionController {
 
   private static Logger log = LoggerFactory.getLogger(QuestionController.class);
@@ -24,7 +24,7 @@ public class QuestionController {
   private QuestionService questionService;
 
   @GetMapping
-  public ResponseEntity<List<Question>> getQuestions() {
+  public ResponseEntity<List<Question>> getAllQuestions() {
     List<Question> list = questionService.getAllQuestions();
     return new ResponseEntity<List<Question>>(list, HttpStatus.OK);
   }

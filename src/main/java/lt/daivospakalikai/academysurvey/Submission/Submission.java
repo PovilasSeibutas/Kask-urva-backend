@@ -1,21 +1,21 @@
-package lt.daivospakalikai.academysurvey.Sumbission;
+package lt.daivospakalikai.academysurvey.Submission;
 
-
+import io.swagger.annotations.ApiModel;
 import java.util.List;
 import java.util.Objects;
 
+@ApiModel("PackagenSubbmision")
 public class Submission {
 
   private Integer id;
-
-  private List<Question> questions;
+  private List<Answer> answers;
 
   public Submission() {
   }
 
-  public Submission(Integer id, List<Question> questions) {
+  public Submission(Integer id, List<Answer> answers) {
     this.id = id;
-    this.questions = questions;
+    this.answers = answers;
   }
 
   public Integer getId() {
@@ -26,12 +26,12 @@ public class Submission {
     this.id = id;
   }
 
-  public List<Question> getQuestions() {
-    return questions;
+  public List<Answer> getAnswers() {
+    return answers;
   }
 
-  public void setQuestions(List<Question> questions) {
-    this.questions = questions;
+  public void setAnswers(List<Answer> answers) {
+    this.answers = answers;
   }
 
   @Override
@@ -44,19 +44,19 @@ public class Submission {
     }
     Submission that = (Submission) o;
     return Objects.equals(id, that.id) &&
-        Objects.equals(questions, that.questions);
+        Objects.equals(answers, that.answers);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, questions);
+    return Objects.hash(id, answers);
   }
 
   @Override
   public String toString() {
     return "Submission{" +
         "id=" + id +
-        ", questions=" + questions +
+        ", answers=" + answers +
         '}';
   }
 }

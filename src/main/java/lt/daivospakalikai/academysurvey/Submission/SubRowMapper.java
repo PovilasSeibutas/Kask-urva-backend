@@ -1,4 +1,4 @@
-package lt.daivospakalikai.academysurvey.Sub;
+package lt.daivospakalikai.academysurvey.Submission;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
