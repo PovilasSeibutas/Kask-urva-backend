@@ -34,11 +34,10 @@ public class Question implements Serializable {
   private String type;
   @Basic(optional = false)
   @NotNull
-  @Size(min = 1, max = 45)
   @Column(name = "question")
   private String question;
   @JsonIgnore
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
   private List<Answer> answerList;
 
   public Question() {
@@ -58,32 +57,16 @@ public class Question implements Serializable {
     return id;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
   public String getType() {
     return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
   }
 
   public String getQuestion() {
     return question;
   }
 
-  public void setQuestion(String question) {
-    this.question = question;
-  }
-
   public List<Answer> getAnswerList() {
     return answerList;
-  }
-
-  public void setAnswerList(List<Answer> answerList) {
-    this.answerList = answerList;
   }
 
   @Override

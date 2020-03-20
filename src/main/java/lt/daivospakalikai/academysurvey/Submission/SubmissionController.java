@@ -1,4 +1,4 @@
-package lt.daivospakalikai.academysurvey.Question;
+package lt.daivospakalikai.academysurvey.Submission;
 
 import java.util.List;
 import org.slf4j.Logger;
@@ -15,22 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/question")
-public class QuestionController {
+@RequestMapping("/submission")
+public class SubmissionController {
 
-  private static Logger log = LoggerFactory.getLogger(QuestionController.class);
+  private static Logger log = LoggerFactory.getLogger(SubmissionController.class);
 
   @Autowired
-  private QuestionService questionService;
+  SubmissionService submissionService;
 
   @GetMapping
-  public ResponseEntity<List<Question>> getAllQuestions() {
-    List<Question> list = questionService.getAllQuestions();
-    return new ResponseEntity<List<Question>>(list, HttpStatus.OK);
+  public ResponseEntity<List<Submission>> getAllSubmissions() {
+    List<Submission> submissionList = submissionService.getAllSubmission();
+    return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
   }
 
-  @PostMapping(consumes = "application/json")
-  public void saveQuestion(@RequestBody Question question) {
-    questionService.saveQuestion(question);
+  @PostMapping
+  public void saveSubmision(@RequestBody List<Answer> answerList) {
+    submissionService.saveSubmission(answerList);
   }
+
 }

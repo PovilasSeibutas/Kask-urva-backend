@@ -35,7 +35,7 @@ public class Survey implements Serializable {
   @Column(name = "status")
   private int status;
   @JsonIgnore
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "survey")
   private List<Answer> answerList;
 
   public Survey() {
@@ -43,6 +43,10 @@ public class Survey implements Serializable {
 
   public Survey(Integer id) {
     this.id = id;
+  }
+
+  public Survey(@NotNull Long timeStamp) {
+    this.timeStamp = timeStamp;
   }
 
   public Survey(Integer id, @NotNull Long timeStamp, @NotNull int status) {
@@ -55,32 +59,16 @@ public class Survey implements Serializable {
     return id;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
   public Long getTimeStamp() {
     return timeStamp;
-  }
-
-  public void setTimeStamp(Long timeStamp) {
-    this.timeStamp = timeStamp;
   }
 
   public int getStatus() {
     return status;
   }
 
-  public void setStatus(int status) {
-    this.status = status;
-  }
-
   public List<Answer> getAnswerList() {
     return answerList;
-  }
-
-  public void setAnswerSet(List<Answer> answerList) {
-    this.answerList = answerList;
   }
 
   @Override

@@ -20,5 +20,4 @@ public class QuestionServiceImp implements QuestionService {
     questionRepository.save(question);
   }
 
-
 }
