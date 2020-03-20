@@ -17,7 +17,7 @@ public class SubmissionServiceImp implements SubmissionService {
   @Override
   public List<Submission> getAllSubmission() {
     Map<Integer, Submission> submissionMap = new TreeMap<>();
-    for (Sub s : submissionRepository.getAll()) {
+    for (SubmissionForm s : submissionRepository.getAll()) {
       if (submissionMap.containsKey(s.getId())) {
         submissionMap.get(s.getId()).getAnswers()
             .add(new Answer(s.getQuestionId(), s.getQuestion(), s.getAnswerId(), s.getAnswer()));
@@ -25,7 +25,7 @@ public class SubmissionServiceImp implements SubmissionService {
         submissionMap.put(s.getId(),
             new Submission(s.getId(), new ArrayList<Answer>() {
               {
-                new Answer(s.getQuestionId(), s.getQuestion(), s.getAnswerId(), s.getAnswer());
+                add(new Answer(s.getQuestionId(), s.getQuestion(), s.getAnswerId(), s.getAnswer()));
               }
             }));
       }
@@ -34,7 +34,7 @@ public class SubmissionServiceImp implements SubmissionService {
   }
 
   @Override
-  public void saveSubmission(@RequestBody Answer answer) {
-    submissionRepository.saveSubmission(answer);
+  public void saveSubmission(@RequestBody List<Answer> answerList) {
+    submissionRepository.saveSubmission(answerList);
   }
 }

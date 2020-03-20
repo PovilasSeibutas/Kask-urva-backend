@@ -6,6 +6,6 @@ public interface SubmissionService {
 
   List<Submission> getAllSubmission();
 
-  void saveSubmission(Answer answer);
+  void saveSubmission(List<Answer> answerList);
 
 }

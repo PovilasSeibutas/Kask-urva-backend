@@ -4,20 +4,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
-public class SubRowMapper implements RowMapper<Sub> {
+public class SubRowMapper implements RowMapper<SubmissionForm> {
 
   @Override
-  public Sub mapRow(final ResultSet rs, final int number) throws SQLException {
+  public SubmissionForm mapRow(final ResultSet rs, final int number) throws SQLException {
 
-    final Sub sub = new Sub();
+    final SubmissionForm submissionForm = new SubmissionForm();
 
-    sub.setId(rs.getInt("id"));
-    sub.setQuestionId(rs.getInt("qid"));
-    sub.setQuestion(rs.getString("question"));
-    sub.setAnswerId(rs.getInt("aid"));
-    sub.setAnswer(rs.getString("answer"));
+    submissionForm.setId(rs.getInt("id"));
+    submissionForm.setQuestionId(rs.getInt("qid"));
+    submissionForm.setQuestion(rs.getString("question"));
+    submissionForm.setAnswerId(rs.getInt("aid"));
+    submissionForm.setAnswer(rs.getString("answer"));
 
-    return sub;
+    return submissionForm;
   }
 
 

@@ -2,7 +2,7 @@ package lt.daivospakalikai.academysurvey.Submission;
 
 import java.util.Objects;
 
-public class Sub {
+public class SubmissionForm {
 
   private Integer id;
   private Integer questionId;
@@ -10,10 +10,10 @@ public class Sub {
   private Integer answerId;
   private String answer;
 
-  public Sub() {
+  public SubmissionForm() {
   }
 
-  public Sub(Integer id, Integer questionId, String question, Integer answerId, String answer) {
+  public SubmissionForm(Integer id, Integer questionId, String question, Integer answerId, String answer) {
     this.id = id;
     this.questionId = questionId;
     this.question = question;
@@ -69,12 +69,12 @@ public class Sub {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Sub sub = (Sub) o;
-    return Objects.equals(id, sub.id) &&
-        Objects.equals(questionId, sub.questionId) &&
-        Objects.equals(question, sub.question) &&
-        Objects.equals(answerId, sub.answerId) &&
-        Objects.equals(answer, sub.answer);
+    SubmissionForm submissionForm = (SubmissionForm) o;
+    return Objects.equals(id, submissionForm.id) &&
+        Objects.equals(questionId, submissionForm.questionId) &&
+        Objects.equals(question, submissionForm.question) &&
+        Objects.equals(answerId, submissionForm.answerId) &&
+        Objects.equals(answer, submissionForm.answer);
   }
 
   @Override
@@ -84,7 +84,7 @@ public class Sub {
 
   @Override
   public String toString() {
-    return "Sub{" +
+    return "SubmissionForm{" +
         "id=" + id +
         ", questionId=" + questionId +
         ", question='" + question + '\'' +
