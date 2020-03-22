@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import lt.daivospakalikai.academysurvey.Email_Send.NotificationService;
+import lt.daivospakalikai.academysurvey.Email_Send.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +16,7 @@ public class SubmissionServiceImp implements SubmissionService {
   @Autowired
   SubmissionRepository submissionRepository;
   @Autowired
-  NotificationService notificationService;
+  EmailService emailService;
 
   @Override
   public List<Submission> getAllSubmission() {
@@ -40,6 +40,6 @@ public class SubmissionServiceImp implements SubmissionService {
   @Override
   public void saveSubmission(@RequestBody List<Answer> answerList) {
     submissionRepository.saveSubmission(answerList);
-    notificationService.signUpSuccess();
+    emailService.sendNotificationEmailToAdmin();
   }
 }

@@ -1,4 +1,3 @@
-/*
 package lt.daivospakalikai.academysurvey.Email_Send;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +12,16 @@ public class RegistrationController {
     private final String notificationText = "Užregistruota nauja aplikacija į IT Akademiją. Ją galite peržiūrėti adresu:";
 
     @Autowired
-    NotificationServiceImp notificationServiceImp;
+    EmailServiceImp emailServiceImp;
+
+    //Controller for testing
 
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/sign-up-success")
     public String signUpSuccess() {
         Admin admin = new Admin();
         try {
-            notificationServiceImp.sendNotification(admin.getAdminEmails(admin.emailProcess(AdminMails.values())), notificationSubject, notificationText);
+            emailServiceImp.sendEmail(admin.getAdminEmails(admin.emailProcess(AdminMails.values())), notificationSubject, notificationText);
         } catch (MailException e) {
             System.out.println("Error ocurred.");
         }
@@ -29,4 +30,3 @@ public class RegistrationController {
     }
 }
 
-*/
