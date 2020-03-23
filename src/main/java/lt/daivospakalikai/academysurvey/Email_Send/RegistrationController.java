@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RegistrationController {
-    private final String notificationSubject = "IT Akademija: Nauja aplikacija!";
-    private final String notificationText = "Užregistruota nauja aplikacija į IT Akademiją. Ją galite peržiūrėti adresu:";
 
     @Autowired
     EmailServiceImp emailServiceImp;
