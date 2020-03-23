@@ -31,7 +31,7 @@ public class SubmissionServiceImp implements SubmissionService {
             .add(s.createNewAnswer());
       } else {
         submissionMap.put(s.getId(),
-            new Submission(s.getId(), new ArrayList(Arrays.asList(s.createNewAnswer()))));
+            new Submission(s.getId(), s.getStatus(), new ArrayList(Arrays.asList(s.createNewAnswer()))));
       }
     }
     return new ArrayList<>(submissionMap.values());
@@ -40,7 +40,7 @@ public class SubmissionServiceImp implements SubmissionService {
   @Override
   public void saveSubmissions(@RequestBody List<Answer> answerList) {
     submissionRepository.saveSubmissions(answerList);
-    emailService.sendNotificationEmailToAdmin();
+//    emailService.sendNotificationEmailToAdmin();
   }
 
   @Override

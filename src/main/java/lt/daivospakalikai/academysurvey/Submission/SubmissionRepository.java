@@ -23,7 +23,7 @@ public class SubmissionRepository {
   }
 
   public List<SubmissionForm> getAll() {
-    String query = "SELECT s.id, q.id as qid, q.question, a.id as aid, a.answer\n"
+    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
         + "FROM academy_survey.survey s, academy_survey.answer a, academy_survey.question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id";
     return jdbcTemplate.query(query, new SubRowMapper());

@@ -10,7 +10,8 @@ public class SubRowMapper implements RowMapper<SubmissionForm> {
   public SubmissionForm mapRow(final ResultSet rs, final int number) throws SQLException {
 
     final SubmissionForm submissionForm = new SubmissionForm(
-        rs.getInt("id"),
+        rs.getInt("sid"),
+        rs.getInt("status"),
         rs.getInt("qid"),
         rs.getString("question"),
         rs.getInt("aid"),
