@@ -28,8 +28,8 @@ dependencies {
 	}
 
 	//SWAGGER
-	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
-	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 
 
 

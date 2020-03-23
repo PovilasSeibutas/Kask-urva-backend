@@ -25,40 +25,24 @@ public class SubmissionForm {
     return id;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
   public Integer getQuestionId() {
     return questionId;
-  }
-
-  public void setQuestionId(Integer questionId) {
-    this.questionId = questionId;
   }
 
   public String getQuestion() {
     return question;
   }
 
-  public void setQuestion(String question) {
-    this.question = question;
-  }
-
   public Integer getAnswerId() {
     return answerId;
-  }
-
-  public void setAnswerId(Integer answerId) {
-    this.answerId = answerId;
   }
 
   public String getAnswer() {
     return answer;
   }
 
-  public void setAnswer(String answer) {
-    this.answer = answer;
+  public Answer createNewAnswer(){
+    return new Answer(getQuestionId(), getQuestion(), getAnswerId(), getAnswer());
   }
 
   @Override

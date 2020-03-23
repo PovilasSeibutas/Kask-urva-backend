@@ -2,6 +2,7 @@ package lt.daivospakalikai.academysurvey.Question;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -66,7 +67,7 @@ public class Question implements Serializable {
   }
 
   public List<Answer> getAnswerList() {
-    return answerList;
+    return Collections.unmodifiableList(answerList);
   }
 
   @Override
