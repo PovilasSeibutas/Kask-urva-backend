@@ -10,4 +10,6 @@ public interface SubmissionService {
 
   Integer getNewSumbisionId();
 
+  void updateSubmissionStatus(SubmissionStatus submissionStatus);
+
 }

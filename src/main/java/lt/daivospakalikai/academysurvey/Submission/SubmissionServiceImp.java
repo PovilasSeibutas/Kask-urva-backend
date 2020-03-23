@@ -48,5 +48,10 @@ public class SubmissionServiceImp implements SubmissionService {
     return surveyService.createSurvey();
   }
 
+  @Override
+  public void updateSubmissionStatus(SubmissionStatus submissionStatus) {
+    submissionRepository.updateSubmissionStatus(submissionStatus);
+  }
+
 
 }

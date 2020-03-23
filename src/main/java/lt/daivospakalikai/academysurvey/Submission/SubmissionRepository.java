@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,7 +32,7 @@ public class SubmissionRepository {
 
   public void saveSubmissions(final List<Answer> answerList) {
     String query =
-        "INSERT INTO `academy_survey`.`answer` (`answer`, `question_id`, `survey_id`) VALUES (?, ?, ?)";
+        "INSERT INTO academy_survey.answer (answer, question_id, survey_id) VALUES (?, ?, ?)";
     Integer newSurveyId = submissionService.getNewSumbisionId();
     jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
       @Override
@@ -44,6 +45,19 @@ public class SubmissionRepository {
       @Override
       public int getBatchSize() {
         return answerList.size();
+      }
+    });
+  }
+
+  public void updateSubmissionStatus(final SubmissionStatus submissionStatus){
+//    String query = "UPDATE ACADEMY_SURVEY.SURVEY SET status = ? WHERE (id = ?)";
+    String query = "UPDATE academy_survey.survey SET status = ?, admin_id = ? WHERE (id = ?)";
+    jdbcTemplate.update(query, new PreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps) throws SQLException {
+        ps.setInt(1, submissionStatus.getStatus());
+        ps.setInt(2, submissionStatus.getAdminId());
+        ps.setInt(3, submissionStatus.getSurveyId());
       }
     });
   }
