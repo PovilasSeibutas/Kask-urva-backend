@@ -19,9 +19,8 @@ public class RegistrationController {
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/sign-up-success")
     public String signUpSuccess() {
-        Admin admin = new Admin();
         try {
-            emailServiceImp.sendEmail(admin.getAdminEmails(admin.emailProcess(AdminMails.values())), notificationSubject, notificationText);
+            emailServiceImp.sendNotificationEmailToAdmin();
         } catch (MailException e) {
             System.out.println("Error ocurred.");
         }
