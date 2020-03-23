@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/submission")
+@RequestMapping("/submissions")
 public class SubmissionController {
 
   private static Logger log = LoggerFactory.getLogger(SubmissionController.class);
@@ -25,13 +25,13 @@ public class SubmissionController {
 
   @GetMapping
   public ResponseEntity<List<Submission>> getAllSubmissions() {
-    List<Submission> submissionList = submissionService.getAllSubmission();
+    List<Submission> submissionList = submissionService.getAllSubmissions();
     return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
   }
 
   @PostMapping
-  public void saveSubmision(@RequestBody List<Answer> answerList) {
-    submissionService.saveSubmission(answerList);
+  public void saveSubmisions(@RequestBody List<Answer> answerList) {
+    submissionService.saveSubmissions(answerList);
   }
 
 }

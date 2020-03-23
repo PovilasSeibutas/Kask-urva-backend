@@ -1,10 +1,11 @@
 package lt.daivospakalikai.academysurvey.Submission;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
+import lt.daivospakalikai.academysurvey.Survey.SurveyService;
 import lt.daivospakalikai.academysurvey.Email_Send.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,28 +19,34 @@ public class SubmissionServiceImp implements SubmissionService {
   @Autowired
   EmailService emailService;
 
+  @Autowired
+  SurveyService surveyService;
+
   @Override
-  public List<Submission> getAllSubmission() {
+  public List<Submission> getAllSubmissions() {
     Map<Integer, Submission> submissionMap = new TreeMap<>();
     for (SubmissionForm s : submissionRepository.getAll()) {
       if (submissionMap.containsKey(s.getId())) {
         submissionMap.get(s.getId()).getAnswers()
-            .add(new Answer(s.getQuestionId(), s.getQuestion(), s.getAnswerId(), s.getAnswer()));
+            .add(s.createNewAnswer());
       } else {
         submissionMap.put(s.getId(),
-            new Submission(s.getId(), new ArrayList<Answer>() {
-              {
-                add(new Answer(s.getQuestionId(), s.getQuestion(), s.getAnswerId(), s.getAnswer()));
-              }
-            }));
+            new Submission(s.getId(), new ArrayList(Arrays.asList(s.createNewAnswer()))));
       }
     }
     return new ArrayList<>(submissionMap.values());
   }
 
   @Override
-  public void saveSubmission(@RequestBody List<Answer> answerList) {
-    submissionRepository.saveSubmission(answerList);
+  public void saveSubmissions(@RequestBody List<Answer> answerList) {
+    submissionRepository.saveSubmissions(answerList);
     emailService.sendNotificationEmailToAdmin();
   }
+
+  @Override
+  public Integer getNewSumbisionId() {
+    return surveyService.createSurvey();
+  }
+
+
 }

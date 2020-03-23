@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import javax.sql.DataSource;
-import lt.daivospakalikai.academysurvey.Survey.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,7 +15,7 @@ public class SubmissionRepository {
   private JdbcTemplate jdbcTemplate;
 
   @Autowired
-  SurveyService surveyService;
+  SubmissionService submissionService;
 
   @Autowired
   public SubmissionRepository(final DataSource dataSource) {
@@ -30,10 +29,10 @@ public class SubmissionRepository {
     return jdbcTemplate.query(query, new SubRowMapper());
   }
 
-  public void saveSubmission(final List<Answer> answerList) {
+  public void saveSubmissions(final List<Answer> answerList) {
     String query =
         "INSERT INTO `academy_survey`.`answer` (`answer`, `question_id`, `survey_id`) VALUES (?, ?, ?)";
-    Integer newSurveyId = surveyService.createSurvey();
+    Integer newSurveyId = submissionService.getNewSumbisionId();
     jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps, int i) throws SQLException {
