@@ -50,7 +50,6 @@ public class SubmissionRepository {
   }
 
   public void updateSubmissionStatus(final SubmissionStatus submissionStatus){
-//    String query = "UPDATE ACADEMY_SURVEY.SURVEY SET status = ? WHERE (id = ?)";
     String query = "UPDATE academy_survey.survey SET status = ?, admin_id = ? WHERE (id = ?)";
     jdbcTemplate.update(query, new PreparedStatementSetter() {
       @Override
