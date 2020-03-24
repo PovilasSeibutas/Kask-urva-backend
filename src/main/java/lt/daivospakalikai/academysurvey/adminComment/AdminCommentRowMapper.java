@@ -8,14 +8,12 @@ public class AdminCommentRowMapper implements RowMapper<AdminComment> {
 
   @Override
   public AdminComment mapRow(ResultSet rs, int rowNum) throws SQLException {
-    final AdminComment adminComment = new AdminComment(
+    return new AdminComment(
         rs.getInt("id"),
         rs.getInt("survey_id"),
         rs.getInt("admin_id"),
         rs.getString("comment"),
         rs.getLong("time_stamp")
     );
-
-    return adminComment;
   }
 }

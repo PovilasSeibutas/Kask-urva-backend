@@ -30,9 +30,15 @@ public class SubmissionController {
     return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
   }
 
+//  @PostMapping
+//  public void saveSubmisions(@RequestBody List<Answer> answerList) {
+//    submissionService.saveSubmissions(answerList);
+//  }
+
   @PostMapping
-  public void saveSubmisions(@RequestBody List<Answer> answerList) {
-    submissionService.saveSubmissions(answerList);
+  public void saveSubmisions(@RequestBody Submission submission) {
+    System.out.println("--------------------------" + submission.toString());
+    submissionService.saveSubmissions(submission.getAnswers());
   }
 
   @PutMapping

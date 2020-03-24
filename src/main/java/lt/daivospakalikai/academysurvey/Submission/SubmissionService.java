@@ -15,6 +15,4 @@ public interface SubmissionService {
   List<Submission> sortSubmissionsByNameAZ();
 
   List<Submission> sortSubmissionsByNameZA();
-
-
 }
