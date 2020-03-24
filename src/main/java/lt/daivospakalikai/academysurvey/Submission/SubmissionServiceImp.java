@@ -6,8 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import lt.daivospakalikai.academysurvey.Survey.SurveyService;
 import lt.daivospakalikai.academysurvey.Email_Send.EmailService;
+import lt.daivospakalikai.academysurvey.Survey.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,13 +31,8 @@ public class SubmissionServiceImp implements SubmissionService {
 
   @Override
   public void saveSubmissions(@RequestBody List<Answer> answerList) {
-    submissionRepository.saveSubmissions(answerList);
+    submissionRepository.saveSubmissions(answerList, surveyService.createSurvey());
 //    emailService.sendNotificationEmailToAdmin();
-  }
-
-  @Override
-  public Integer getNewSubmissionId() {
-    return surveyService.createSurvey();
   }
 
   @Override

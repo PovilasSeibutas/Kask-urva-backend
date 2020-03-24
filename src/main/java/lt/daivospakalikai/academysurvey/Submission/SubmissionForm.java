@@ -48,7 +48,7 @@ public class SubmissionForm {
     return status;
   }
 
-  public Answer createNewAnswer(){
+  public Answer createNewAnswer() {
     return new Answer(getQuestionId(), getQuestion(), getAnswerId(), getAnswer());
   }
 

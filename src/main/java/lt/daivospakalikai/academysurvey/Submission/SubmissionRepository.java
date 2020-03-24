@@ -30,10 +30,9 @@ public class SubmissionRepository {
     return jdbcTemplate.query(query, new SubRowMapper());
   }
 
-  public void saveSubmissions(final List<Answer> answerList) {
+  public void saveSubmissions(final List<Answer> answerList, Integer newSurveyId) {
     String query =
         "INSERT INTO academy_survey.answer (answer, question_id, survey_id) VALUES (?, ?, ?)";
-    Integer newSurveyId = submissionService.getNewSubmissionId();
     jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps, int i) throws SQLException {
