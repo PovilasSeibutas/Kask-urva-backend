@@ -30,7 +30,7 @@ public class SubmissionController {
   }
 
   @PostMapping
-  public void saveSubmision(@RequestBody List<Answer> answerList) {
+  public void saveSubmission(@RequestBody List<Answer> answerList) {
     submissionService.saveSubmission(answerList);
   }
 
