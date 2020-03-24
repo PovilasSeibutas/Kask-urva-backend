@@ -1,5 +1,6 @@
 package lt.daivospakalikai.academysurvey.Submission;
 
+import io.swagger.models.auth.In;
 import java.util.List;
 
 public interface SubmissionService {
@@ -15,4 +16,6 @@ public interface SubmissionService {
   List<Submission> sortSubmissionsByNameAZ();
 
   List<Submission> sortSubmissionsByNameZA();
+
+  Submission getSubmissionById(Integer id);
 }

@@ -57,6 +57,12 @@ public class SubmissionServiceImp implements SubmissionService {
     return getDataFromDB(submissionMap, submissionRepository.sortSubmissionsByNameZA());
   }
 
+  @Override
+  public Submission getSubmissionById(Integer id) {
+    Map<Integer, Submission> submissionMap = new TreeMap<>();
+    return getDataFromDB(submissionMap, submissionRepository.getSubmissionById(id)).get(0);
+  }
+
   private ArrayList<Submission> getDataFromDB(Map<Integer, Submission> map,
       List<SubmissionForm> submissionFormList) {
     for (SubmissionForm s : submissionFormList) {

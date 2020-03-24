@@ -49,7 +49,7 @@ public class SubmissionRepository {
     });
   }
 
-  public void updateSubmissionStatus(final SubmissionStatus submissionStatus){
+  public void updateSubmissionStatus(final SubmissionStatus submissionStatus) {
     String query = "UPDATE academy_survey.survey SET status = ?, admin_id = ? WHERE (id = ?)";
     jdbcTemplate.update(query, new PreparedStatementSetter() {
       @Override
@@ -89,5 +89,17 @@ public class SubmissionRepository {
         + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = sid\n"
         + "order by combined desc";
     return jdbcTemplate.query(query, new SubRowMapper());
+  }
+
+  public List<SubmissionForm> getSubmissionById(Integer id) {
+    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
+        + "FROM academy_survey.survey s, academy_survey.answer a, academy_survey.question q\n"
+        + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = ?";
+    return jdbcTemplate.query(query, new PreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps) throws SQLException {
+        ps.setInt(1, id);
+      }
+    }, new SubRowMapper());
   }
 }
