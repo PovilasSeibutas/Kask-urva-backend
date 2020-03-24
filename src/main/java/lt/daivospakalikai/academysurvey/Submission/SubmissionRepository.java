@@ -33,7 +33,7 @@ public class SubmissionRepository {
   public void saveSubmissions(final List<Answer> answerList) {
     String query =
         "INSERT INTO academy_survey.answer (answer, question_id, survey_id) VALUES (?, ?, ?)";
-    Integer newSurveyId = submissionService.getNewSumbisionId();
+    Integer newSurveyId = submissionService.getNewSubmissionId();
     jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -59,5 +59,35 @@ public class SubmissionRepository {
         ps.setInt(3, submissionStatus.getSurveyId());
       }
     });
+  }
+
+  public List<SubmissionForm> sortSubmissionsByNameAZ() {
+    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
+        + "FROM academy_survey.survey s, academy_survey.answer a, academy_survey.question q\n"
+        + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid -- cai galima keisti tvarka\n"
+        + "from academy_survey.answer a1\n"
+        + "join academy_survey.answer a2\n"
+        + "where a1.survey_id = a2.survey_id \n"
+        + "\tand a1.question_id = 1\n"
+        + "    and a2.question_id = 2  \n"
+        + "    and a1.question_id <> a2.question_id) c \n"
+        + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = sid\n"
+        + "order by combined";
+    return jdbcTemplate.query(query, new SubRowMapper());
+  }
+
+  public List<SubmissionForm> sortSubmissionsByNameZA() {
+    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
+        + "FROM academy_survey.survey s, academy_survey.answer a, academy_survey.question q\n"
+        + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid -- cai galima keisti tvarka\n"
+        + "from academy_survey.answer a1\n"
+        + "join academy_survey.answer a2\n"
+        + "where a1.survey_id = a2.survey_id \n"
+        + "\tand a1.question_id = 1\n"
+        + "    and a2.question_id = 2  \n"
+        + "    and a1.question_id <> a2.question_id) c \n"
+        + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = sid\n"
+        + "order by combined desc";
+    return jdbcTemplate.query(query, new SubRowMapper());
   }
 }

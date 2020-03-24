@@ -2,6 +2,7 @@ package lt.daivospakalikai.academysurvey.Submission;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,16 +26,7 @@ public class SubmissionServiceImp implements SubmissionService {
   @Override
   public List<Submission> getAllSubmissions() {
     Map<Integer, Submission> submissionMap = new TreeMap<>();
-    for (SubmissionForm s : submissionRepository.getAll()) {
-      if (submissionMap.containsKey(s.getId())) {
-        submissionMap.get(s.getId()).getAnswers()
-            .add(s.createNewAnswer());
-      } else {
-        submissionMap.put(s.getId(),
-            new Submission(s.getId(), s.getStatus(), new ArrayList(Arrays.asList(s.createNewAnswer()))));
-      }
-    }
-    return new ArrayList<>(submissionMap.values());
+    return getDataFromDB(submissionMap, submissionRepository.getAll());
   }
 
   @Override
@@ -44,7 +36,7 @@ public class SubmissionServiceImp implements SubmissionService {
   }
 
   @Override
-  public Integer getNewSumbisionId() {
+  public Integer getNewSubmissionId() {
     return surveyService.createSurvey();
   }
 
@@ -53,5 +45,30 @@ public class SubmissionServiceImp implements SubmissionService {
     submissionRepository.updateSubmissionStatus(submissionStatus);
   }
 
+  @Override
+  public List<Submission> sortSubmissionsByNameAZ() {
+    Map<Integer, Submission> submissionMap = new LinkedHashMap<>();
+    return getDataFromDB(submissionMap, submissionRepository.sortSubmissionsByNameAZ());
+  }
+
+  @Override
+  public List<Submission> sortSubmissionsByNameZA() {
+    Map<Integer, Submission> submissionMap = new LinkedHashMap<>();
+    return getDataFromDB(submissionMap, submissionRepository.sortSubmissionsByNameZA());
+  }
+
+  private ArrayList<Submission> getDataFromDB(Map<Integer, Submission> map,
+      List<SubmissionForm> submissionFormList) {
+    for (SubmissionForm s : submissionFormList) {
+      if (map.containsKey(s.getId())) {
+        map.get(s.getId()).getAnswers()
+            .add(s.createNewAnswer());
+      } else {
+        map.put(s.getId(),
+            new Submission(s.getId(), s.getStatus(), new ArrayList(Arrays.asList(s.createNewAnswer()))));
+      }
+    }
+    return new ArrayList<>(map.values());
+  }
 
 }

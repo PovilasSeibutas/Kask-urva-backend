@@ -17,7 +17,6 @@ public class SubRowMapper implements RowMapper<SubmissionForm> {
         rs.getInt("aid"),
         rs.getString("answer")
     );
-
     return submissionForm;
   }
 

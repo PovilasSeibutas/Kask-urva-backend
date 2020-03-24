@@ -40,4 +40,15 @@ public class SubmissionController {
     submissionService.updateSubmissionStatus(submissionStatus);
   }
 
+  @GetMapping ("/sorted-submissions-az")
+  public ResponseEntity<List<Submission>> getSortSubmisionsByNameAZ() {
+    List<Submission> submissionList = submissionService.sortSubmissionsByNameAZ();
+    return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
+  }
+
+  @GetMapping ("/sorted-submissions-za")
+  public ResponseEntity<List<Submission>> getSortSubmisionsByNameZA() {
+    List<Submission> submissionList = submissionService.sortSubmissionsByNameZA();
+    return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
+  }
 }

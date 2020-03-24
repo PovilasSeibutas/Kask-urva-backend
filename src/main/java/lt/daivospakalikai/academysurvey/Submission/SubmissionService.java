@@ -8,8 +8,13 @@ public interface SubmissionService {
 
   void saveSubmissions(List<Answer> answerList);
 
-  Integer getNewSumbisionId();
+  Integer getNewSubmissionId();
 
   void updateSubmissionStatus(SubmissionStatus submissionStatus);
+
+  List<Submission> sortSubmissionsByNameAZ();
+
+  List<Submission> sortSubmissionsByNameZA();
+
 
 }
