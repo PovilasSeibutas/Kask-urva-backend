@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,8 +32,30 @@ public class SubmissionController {
   }
 
   @PostMapping
-  public void saveSubmisions(@RequestBody List<Answer> answerList) {
-    submissionService.saveSubmissions(answerList);
+  public void saveSubmisions(@RequestBody Submission submission) {
+    submissionService.saveSubmissions(submission.getAnswers());
   }
 
+  @PutMapping
+  public void updateSumbssionStatus(@RequestBody SubmissionStatus submissionStatus) {
+    submissionService.updateSubmissionStatus(submissionStatus);
+  }
+
+  @GetMapping("/sorted-submissions-az")
+  public ResponseEntity<List<Submission>> getSortSubmisionsByNameAZ() {
+    List<Submission> submissionList = submissionService.sortSubmissionsByNameAZ();
+    return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
+  }
+
+  @GetMapping("/sorted-submissions-za")
+  public ResponseEntity<List<Submission>> getSortSubmisionsByNameZA() {
+    List<Submission> submissionList = submissionService.sortSubmissionsByNameZA();
+    return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
+  }
+
+  //for testing purposes
+  @GetMapping("/{id}")
+  public Submission getSubmissionById(@PathVariable Integer id) {
+    return submissionService.getSubmissionById(id);
+  }
 }

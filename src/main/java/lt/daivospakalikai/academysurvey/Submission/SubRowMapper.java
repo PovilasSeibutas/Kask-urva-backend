@@ -9,15 +9,14 @@ public class SubRowMapper implements RowMapper<SubmissionForm> {
   @Override
   public SubmissionForm mapRow(final ResultSet rs, final int number) throws SQLException {
 
-    final SubmissionForm submissionForm = new SubmissionForm(
-        rs.getInt("id"),
+    return new SubmissionForm(
+        rs.getInt("sid"),
+        rs.getInt("status"),
         rs.getInt("qid"),
         rs.getString("question"),
         rs.getInt("aid"),
         rs.getString("answer")
     );
-
-    return submissionForm;
   }
 
 
