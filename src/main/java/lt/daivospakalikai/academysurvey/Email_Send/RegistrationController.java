@@ -14,8 +14,8 @@ public class RegistrationController {
 
     //Controller for testing
 
-    @CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping("/sign-up-success")
+    @CrossOrigin(origins = "*")
+    @RequestMapping("/send-email")
     public String signUpSuccess() {
         try {
             emailServiceImp.sendNotificationEmailToAdmin();
