@@ -1,13 +1,18 @@
 package lt.daivospakalikai.academysurvey.Submission;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 @ApiModel("PackageSubAnswer")
 class Answer {
 
   private Integer questionId;
+  @ApiModelProperty(readOnly = true)
+  @JsonProperty(access = Access.READ_ONLY)
   private String question;
   @JsonIgnore
   private Integer answerId;

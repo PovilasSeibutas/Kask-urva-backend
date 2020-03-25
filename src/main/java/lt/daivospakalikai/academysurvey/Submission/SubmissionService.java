@@ -4,8 +4,15 @@ import java.util.List;
 
 public interface SubmissionService {
 
-  List<Submission> getAllSubmission();
+  List<Submission> getAllSubmissions();
 
-  void saveSubmission(List<Answer> answerList);
+  void saveSubmissions(List<Answer> answerList);
 
+  void updateSubmissionStatus(SubmissionStatus submissionStatus);
+
+  List<Submission> sortSubmissionsByNameAZ();
+
+  List<Submission> sortSubmissionsByNameZA();
+
+  Submission getSubmissionById(Integer id);
 }

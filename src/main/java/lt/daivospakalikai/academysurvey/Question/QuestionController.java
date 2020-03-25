@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/question")
+@RequestMapping("/questions")
 public class QuestionController {
 
   private static Logger log = LoggerFactory.getLogger(QuestionController.class);
