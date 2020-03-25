@@ -15,4 +15,6 @@ public interface SubmissionService {
   List<Submission> sortSubmissionsByNameZA();
 
   Submission getSubmissionById(Integer id);
+
+  List<Submission> filterSubmissions(List<String> filterList);
 }

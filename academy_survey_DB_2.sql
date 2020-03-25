@@ -9,6 +9,7 @@ CREATE TABLE `academy_survey`.`question` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_bin;
+
 CREATE TABLE `academy_survey`.`survey` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `time_stamp` INT(15) NOT NULL,
@@ -39,6 +40,42 @@ CREATE TABLE `academy_survey`.`answer` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_bin;
+
+-- ADMINT testavimui:
+CREATE TABLE `academy_survey`.`admin` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  `pswd` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+-- survey status keitimas admin_ID:
+
+ALTER TABLE `academy_survey`.`survey` 
+ADD COLUMN `admin_id` INT NOT NULL DEFAULT 0 AFTER `status`;
+
+-- create comment table
+CREATE TABLE `academy_survey`.`comment` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `survey_id` INT NOT NULL,
+  `admin_id` INT NOT NULL,
+  `comment` TEXT NOT NULL,
+  `time_stamp` INT(15) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `comment_survey_id_fk_idx` (`survey_id` ASC) VISIBLE,
+  INDEX `comment_admin_id_fk_idx` (`admin_id` ASC) VISIBLE,
+  CONSTRAINT `comment_survey_id_fk`
+    FOREIGN KEY (`survey_id`)
+    REFERENCES `academy_survey`.`survey` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `comment_admin_id_fk`
+    FOREIGN KEY (`admin_id`)
+    REFERENCES `academy_survey`.`admin` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE RESTRICT);
 
 
 

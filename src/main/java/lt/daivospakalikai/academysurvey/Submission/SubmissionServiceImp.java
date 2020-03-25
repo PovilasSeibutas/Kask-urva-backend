@@ -2,6 +2,7 @@ package lt.daivospakalikai.academysurvey.Submission;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,6 @@ public class SubmissionServiceImp implements SubmissionService {
   SubmissionRepository submissionRepository;
   @Autowired
   EmailService emailService;
-
   @Autowired
   SurveyService surveyService;
 
@@ -56,6 +56,12 @@ public class SubmissionServiceImp implements SubmissionService {
   public Submission getSubmissionById(Integer id) {
     Map<Integer, Submission> submissionMap = new TreeMap<>();
     return getDataFromDB(submissionMap, submissionRepository.getSubmissionById(id)).get(0);
+  }
+
+  @Override
+  public List<Submission> filterSubmissions(List<String> filterList) {
+    Map<Integer, Submission> submissionMap = new LinkedHashMap<>();
+    return getDataFromDB(submissionMap, submissionRepository.filterSubmissions(filterList));
   }
 
   private ArrayList<Submission> getDataFromDB(Map<Integer, Submission> map,

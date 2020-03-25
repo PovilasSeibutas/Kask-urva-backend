@@ -1,8 +1,14 @@
 package lt.daivospakalikai.academysurvey.Submission;
 
+import java.lang.reflect.Array;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -14,13 +20,20 @@ import org.springframework.stereotype.Service;
 public class SubmissionRepository {
 
   private JdbcTemplate jdbcTemplate;
-
+  private Map<String, String> sortFilterMap;
   @Autowired
   SubmissionService submissionService;
 
   @Autowired
   public SubmissionRepository(final DataSource dataSource) {
     jdbcTemplate = new JdbcTemplate(dataSource);
+    sortFilterMap = new HashMap<>();
+    sortFilterMap.put("answer", "a.answer");
+    sortFilterMap.put("question", "q.question");
+    sortFilterMap.put("questionId", "q.id");
+    sortFilterMap.put("id", "s.id");
+    sortFilterMap.put("status", "s.status");
+
   }
 
   public List<SubmissionForm> getAll() {
@@ -101,4 +114,57 @@ public class SubmissionRepository {
       }
     }, new SubRowMapper());
   }
+
+  public List<SubmissionForm> filterSubmissions(List<String> fieldList) {
+    Map<String, String> filtersMap = new LinkedHashMap<>();
+    Map<String, List<String>> typeMap = new LinkedHashMap<>();
+    List<String> typeList = new ArrayList<>();
+    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
+        + "FROM academy_survey.survey s, academy_survey.answer a, academy_survey.question q\n"
+        + "WHERE s.id = a.survey_id AND q.id = a.question_id\n"
+        + "having 1";
+    for (String fs : fieldList) {
+      String key = Array.get(fs.split("="), 0).toString();
+      String value = Array.get(fs.split("="), 1).toString();
+      List<String> newTypeList = new ArrayList(Arrays.asList(value));
+      typeList.add(key);
+      if (filtersMap.containsKey(key)) {
+        filtersMap.replace(key, sortFilterMap.get(key) + " in (" + filtersMap.get(key) + ", ? )");
+        newTypeList.addAll(typeMap.get(key));
+        typeMap.replace(key, newTypeList);
+      } else {
+        filtersMap.put(key, sortFilterMap.get(key) + "= ?");
+        typeMap.put(key, newTypeList);
+      }
+    }
+    for (Map.Entry<String, String> f : filtersMap.entrySet()) {
+      query = new StringBuilder().append(query).append(" AND " + f.getValue()).toString();
+    }
+
+    return getFilteredSubmissions(query, typeList, getFilteredValues(typeMap));
+  }
+
+  private List<SubmissionForm> getFilteredSubmissions(String query, List<String> typeType, List<String> typeValues) {
+    return jdbcTemplate.query(query, new PreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps) throws SQLException {
+        for (int i = 0; i < typeType.size(); i++) {
+          if (typeType.get(i).equals("number")) {
+            ps.setInt(i + 1, Integer.valueOf(typeValues.get(i)));
+          } else {
+            ps.setString(i + 1, typeValues.get(i));
+          }
+        }
+      }
+    }, new SubRowMapper());
+  }
+
+  private List<String> getFilteredValues(Map<String, List<String>> typeMap) {
+    List<String> typeValues = new ArrayList<>();
+    for (Map.Entry<String, List<String>> tp : typeMap.entrySet()) {
+        typeValues.addAll(tp.getValue());
+    }
+    return typeValues;
+  }
+
 }

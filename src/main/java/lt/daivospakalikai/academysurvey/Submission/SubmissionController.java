@@ -58,4 +58,10 @@ public class SubmissionController {
   public Submission getSubmissionById(@PathVariable Integer id) {
     return submissionService.getSubmissionById(id);
   }
+
+  @PostMapping("/filter")
+  public List<Submission> filterSubmissions(@RequestBody List<String> filterString){
+    return submissionService.filterSubmissions(filterString);
+  }
+
 }
