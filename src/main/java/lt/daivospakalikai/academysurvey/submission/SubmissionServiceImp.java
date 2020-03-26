@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import lt.daivospakalikai.academysurvey.email_Send.EmailService;
+import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import lt.daivospakalikai.academysurvey.survey.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,9 +59,9 @@ public class SubmissionServiceImp implements SubmissionService {
   }
 
   @Override
-  public List<Submission> filterSubmissions(List<String> filterList) {
+  public List<Submission> filterAndSortSubmissions(SubmissionFilter submissionFilter) {
     Map<Integer, Submission> submissionMap = new LinkedHashMap<>();
-    return getDataFromDB(submissionMap, submissionRepository.filterSubmissions(filterList));
+    return getDataFromDB(submissionMap, submissionRepository.filterAndSortSubmissions(submissionFilter));
   }
 
   private ArrayList<Submission> getDataFromDB(Map<Integer, Submission> map,

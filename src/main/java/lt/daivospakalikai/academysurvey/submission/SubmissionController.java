@@ -1,6 +1,7 @@
 package lt.daivospakalikai.academysurvey.submission;
 
 import java.util.List;
+import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,8 @@ public class SubmissionController {
   }
 
   @PostMapping("/filter")
-  public List<Submission> filterSubmissions(@RequestBody List<String> filterString){
-    return submissionService.filterSubmissions(filterString);
+  public List<Submission> filterSubmissions(@RequestBody SubmissionFilter submissionFilter){
+    return submissionService.filterAndSortSubmissions(submissionFilter);
   }
 
 }

@@ -1,4 +1,4 @@
-package lt.daivospakalikai.academysurvey.adminComment;
+package lt.daivospakalikai.academysurvey.admincomment;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

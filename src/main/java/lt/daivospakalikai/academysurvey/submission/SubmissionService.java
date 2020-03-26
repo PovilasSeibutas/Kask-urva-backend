@@ -1,6 +1,7 @@
 package lt.daivospakalikai.academysurvey.submission;
 
 import java.util.List;
+import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 
 public interface SubmissionService {
 
@@ -16,5 +17,5 @@ public interface SubmissionService {
 
   Submission getSubmissionById(Integer id);
 
-  List<Submission> filterSubmissions(List<String> filterList);
+  List<Submission> filterAndSortSubmissions(SubmissionFilter submissionFilter);
 }

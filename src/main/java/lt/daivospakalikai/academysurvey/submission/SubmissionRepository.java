@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
+import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -115,7 +116,7 @@ public class SubmissionRepository {
     }, new SubRowMapper());
   }
 
-  public List<SubmissionForm> filterSubmissions(List<String> fieldList) {
+  public List<SubmissionForm> filterAndSortSubmissions(SubmissionFilter submissionFilter) {
     Map<String, String> filtersMap = new LinkedHashMap<>();
     Map<String, List<String>> typeMap = new LinkedHashMap<>();
     List<String> typeList = new ArrayList<>();
@@ -123,7 +124,7 @@ public class SubmissionRepository {
         + "FROM academy_survey.survey s, academy_survey.answer a, academy_survey.question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id\n"
         + "having 1";
-    for (String fs : fieldList) {
+    for (String fs : submissionFilter.getFilterList()) {
       String key = Array.get(fs.split("="), 0).toString();
       String value = Array.get(fs.split("="), 1).toString();
       List<String> newTypeList = new ArrayList(Arrays.asList(value));
@@ -140,6 +141,13 @@ public class SubmissionRepository {
     for (Map.Entry<String, String> f : filtersMap.entrySet()) {
       query = new StringBuilder().append(query).append(" AND " + f.getValue()).toString();
     }
+
+    if (!generateOrderByString(submissionFilter.getSortList()).equals(" order by ")) {
+      query = new StringBuilder().append(query)
+          .append(generateOrderByString(submissionFilter.getSortList())).toString();
+    }
+
+    System.out.println(query);
 
     return getFilteredSubmissions(query, typeList, getFilteredValues(typeMap));
   }
@@ -162,9 +170,28 @@ public class SubmissionRepository {
   private List<String> getFilteredValues(Map<String, List<String>> typeMap) {
     List<String> typeValues = new ArrayList<>();
     for (Map.Entry<String, List<String>> tp : typeMap.entrySet()) {
-        typeValues.addAll(tp.getValue());
+      typeValues.addAll(tp.getValue());
     }
     return typeValues;
+  }
+
+  private String generateOrderByString(List<String> sortList) {
+    String query = " order by ";
+    List<String> sortByList = new ArrayList<>();
+    for (String s : sortList) {
+      String key = Array.get(s.split("="), 0).toString();
+      if (sortFilterMap.get(key) != null) {
+        sortByList.add(sortFilterMap.get(key) + " " + Array.get(s.split("="), 1).toString());
+      }
+    }
+    for (int i = 0; i < sortByList.size(); i++) {
+      if (i == sortByList.size() - 1) {
+        query = new StringBuilder().append(query).append(sortByList.get(i)).toString();
+      } else {
+        query = new StringBuilder().append(query).append(sortByList.get(i) + ", ").toString();
+      }
+    }
+    return query;
   }
 
 }
