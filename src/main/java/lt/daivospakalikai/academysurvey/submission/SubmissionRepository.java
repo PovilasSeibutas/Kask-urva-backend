@@ -147,8 +147,6 @@ public class SubmissionRepository {
           .append(generateOrderByString(submissionFilter.getSortList())).toString();
     }
 
-    System.out.println(query);
-
     return getFilteredSubmissions(query, typeList, getFilteredValues(typeMap));
   }
 
