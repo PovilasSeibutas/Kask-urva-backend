@@ -40,8 +40,4 @@ public class MessageServiceImp implements MessageService {
     messageRepository.deleteRelay(messageOutbox);
   }
 
-  @Override
-  public void updateMessageStatus(Message message) {
-    messageRepository.updateMessageStatus(message);
-  }
 }

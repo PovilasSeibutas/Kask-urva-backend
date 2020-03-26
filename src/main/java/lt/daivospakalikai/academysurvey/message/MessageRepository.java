@@ -62,15 +62,4 @@ public class MessageRepository {
     jdbcTemplate.update(query, messageOutbox.getId());
   }
 
-  public void updateMessageStatus(final Message message) {
-    String query = "UPDATE academy_survey.message SET status = ? WHERE (id = ?)";
-    jdbcTemplate.update(query, new PreparedStatementSetter() {
-      @Override
-      public void setValues(PreparedStatement ps) throws SQLException {
-        ps.setInt(1, message.getStatus());
-        ps.setInt(2, message.getId());
-      }
-    });
-  }
-
 }
