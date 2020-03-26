@@ -61,7 +61,7 @@ public class SubmissionController {
   }
 
   @PostMapping("/filter")
-  public List<Submission> filterSubmissions(@RequestBody SubmissionFilter submissionFilter){
+  public List<Submission> filterAndSortSubmissions(@RequestBody SubmissionFilter submissionFilter){
     return submissionService.filterAndSortSubmissions(submissionFilter);
   }
 
