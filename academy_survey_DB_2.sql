@@ -10,6 +10,11 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_bin;
 
+-- table update in order to save JSON object
+ALTER TABLE `academy_survey`.`question` 
+DROP COLUMN `type`,
+ADD COLUMN `option` JSON NULL AFTER `question`;
+
 CREATE TABLE `academy_survey`.`survey` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `time_stamp` INT(15) NOT NULL,
@@ -76,8 +81,73 @@ CREATE TABLE `academy_survey`.`comment` (
     REFERENCES `academy_survey`.`admin` (`id`)
     ON DELETE NO ACTION
     ON UPDATE RESTRICT);
+    
+    -- create message table
+    
+    CREATE TABLE `academy_survey`.`message` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(45) NOT NULL,
+  `message` TEXT NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
 
+-- status appended
 
+ALTER TABLE `academy_survey`.`message` 
+ADD COLUMN `status` INT NOT NULL DEFAULT 0 AFTER `message`;
+    
+    -- create message-outbox table
+
+CREATE TABLE `academy_survey`.`message_outbox` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `replay` TEXT NOT NULL,
+  `message_id` INT NOT NULL,
+  `admin_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `message_inbox_message_id_fk_idx` (`message_id` ASC) VISIBLE,
+  INDEX `message_inbox_admin_id_fk_idx` (`admin_id` ASC) VISIBLE,
+  CONSTRAINT `message_inbox_message_id_fk`
+    FOREIGN KEY (`message_id`)
+    REFERENCES `academy_survey`.`message` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `message_inbox_admin_id_fk`
+    FOREIGN KEY (`admin_id`)
+    REFERENCES `academy_survey`.`admin` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+-- edit fk;
+ALTER TABLE `academy_survey`.`message_outbox` 
+DROP FOREIGN KEY `message_inbox_message_id_fk`;
+ALTER TABLE `academy_survey`.`message_outbox` 
+ADD CONSTRAINT `message_inbox_message_id_fk`
+  FOREIGN KEY (`message_id`)
+  REFERENCES `academy_survey`.`message` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE RESTRICT;
+  
+  ALTER TABLE `academy_survey`.`message_outbox` 
+DROP FOREIGN KEY `message_inbox_admin_id_fk`,
+DROP FOREIGN KEY `message_inbox_message_id_fk`;
+ALTER TABLE `academy_survey`.`message_outbox` 
+CHANGE COLUMN `message_id` `message_id` INT(11) NULL ,
+CHANGE COLUMN `admin_id` `admin_id` INT(11) NULL ;
+ALTER TABLE `academy_survey`.`message_outbox` 
+ADD CONSTRAINT `message_inbox_admin_id_fk`
+  FOREIGN KEY (`admin_id`)
+  REFERENCES `academy_survey`.`admin` (`id`)
+  ON DELETE SET NULL
+  ON UPDATE RESTRICT,
+ADD CONSTRAINT `message_inbox_message_id_fk`
+  FOREIGN KEY (`message_id`)
+  REFERENCES `academy_survey`.`message` (`id`)
+  ON DELETE SET NULL
+  ON UPDATE RESTRICT;
 
 INSERT INTO `academy_survey`.`survey` (`time_stamp`) VALUES ('1584057600');
 
