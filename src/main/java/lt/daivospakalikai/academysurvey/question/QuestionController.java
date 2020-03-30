@@ -29,7 +29,7 @@ public class QuestionController {
     return new ResponseEntity<List<Question>>(list, HttpStatus.OK);
   }
 
-  @PostMapping(consumes = "application/json")
+  @PostMapping
   public void saveQuestion(@RequestBody Question question) {
     questionService.saveQuestion(question);
   }

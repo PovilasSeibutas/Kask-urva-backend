@@ -1,73 +1,109 @@
 package lt.daivospakalikai.academysurvey.question;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import lt.daivospakalikai.academysurvey.answer.Answer;
 
-@Entity
-@Table(name = "question")
-public class Question implements Serializable {
+public class Question {
 
-  private static final long serialVersionUID = 1L;
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Basic(optional = false)
-  @Column(name = "id")
   private Integer id;
-  @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 45)
-  @Column(name = "type")
-  private String type;
-  @Basic(optional = false)
-  @NotNull
-  @Column(name = "question")
   private String question;
-  @JsonIgnore
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
-  private List<Answer> answerList;
+  private String key;
+  private String controlType;
+  private String type;
+  private String label;
+  private String value;
+  private Boolean required;
+  private Boolean showExtraField;
+  private String extraField;
+  private Integer order;
+  private List<Options> options;
 
   public Question() {
   }
 
-  public Question(Integer id) {
+  public Question(Integer id, String question, String key, String controlType, String type, String label,
+      String value, Boolean required, Boolean showExtraField, String extraField, Integer order,
+      List<Options> options) {
     this.id = id;
-  }
-
-  public Question(Integer id, String type, String question) {
-    this.id = id;
-    this.type = type;
     this.question = question;
+    this.key = key;
+    this.controlType = controlType;
+    this.type = type;
+    this.label = label;
+    this.value = value;
+    this.required = required;
+    this.showExtraField = showExtraField;
+    this.extraField = extraField;
+    this.order = order;
+    this.options = options;
   }
 
-  public Integer getId() {
-    return id;
-  }
-
-  public String getType() {
-    return type;
+  public Question(Integer id, String question, Option option) {
+    this.id = id;
+    this.question = question;
+    this.key = option.getKey();
+    this.controlType = option.getControlType();
+    this.type = option.getType();
+    this.label = option.getLabel();
+    this.value = option.getValue();
+    this.required = option.getRequired();
+    this.showExtraField = option.getShowExtraField();
+    this.extraField = option.getExtraField();
+    this.order = option.getOrder();
+    this.options = option.getOptions();
   }
 
   public String getQuestion() {
     return question;
   }
 
-  public List<Answer> getAnswerList() {
-    return Collections.unmodifiableList(answerList);
+  public Option createOption() {
+    return new Option(this.key, this.controlType, this.type, this.label, this.value, this.required,
+        this.showExtraField, this.extraField, this.order, this.options);
+  }
+
+  public Integer getId() {
+    return id;
+  }
+
+  public String getKey() {
+    return key;
+  }
+
+  public String getControlType() {
+    return controlType;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public String getLabel() {
+    return label;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public Boolean getRequired() {
+    return required;
+  }
+
+  public Boolean getShowExtraField() {
+    return showExtraField;
+  }
+
+  public String getExtraField() {
+    return extraField;
+  }
+
+  public Integer getOrder() {
+    return order;
+  }
+
+  public List<Options> getOptions() {
+    return options;
   }
 
   @Override
@@ -80,23 +116,40 @@ public class Question implements Serializable {
     }
     Question question1 = (Question) o;
     return Objects.equals(id, question1.id) &&
-        Objects.equals(type, question1.type) &&
         Objects.equals(question, question1.question) &&
-        Objects.equals(answerList, question1.answerList);
+        Objects.equals(key, question1.key) &&
+        Objects.equals(controlType, question1.controlType) &&
+        Objects.equals(type, question1.type) &&
+        Objects.equals(label, question1.label) &&
+        Objects.equals(value, question1.value) &&
+        Objects.equals(required, question1.required) &&
+        Objects.equals(showExtraField, question1.showExtraField) &&
+        Objects.equals(extraField, question1.extraField) &&
+        Objects.equals(order, question1.order) &&
+        Objects.equals(options, question1.options);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, type, question, answerList);
+    return Objects
+        .hash(id, question, key, controlType, type, label, value, required, showExtraField, extraField, order, options);
   }
 
   @Override
   public String toString() {
-    return "question{" +
+    return "Question{" +
         "id=" + id +
-        ", type='" + type + '\'' +
         ", question='" + question + '\'' +
-        ", answerSet=" + answerList +
+        ", key='" + key + '\'' +
+        ", controlType='" + controlType + '\'' +
+        ", type='" + type + '\'' +
+        ", label='" + label + '\'' +
+        ", value='" + value + '\'' +
+        ", required=" + required +
+        ", showExtraField=" + showExtraField +
+        ", extraField='" + extraField + '\'' +
+        ", order=" + order +
+        ", options=" + options +
         '}';
   }
 }
