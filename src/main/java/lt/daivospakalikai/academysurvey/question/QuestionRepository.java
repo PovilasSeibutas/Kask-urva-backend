@@ -41,16 +41,21 @@ public class QuestionRepository {
     });
   }
 
-//  public void updateQuestion(final Question question) {
-//    String query = "UPDATE academy_survey.question SET question = ?, option = ? WHERE (id = 106)";
-//    jdbcTemplate.update(query, new PreparedStatementSetter() {
-//      @Override
-//      public void setValues(PreparedStatement ps) throws SQLException {
-//        ps.setString(1, adminComment.getComment());
-//        ps.setInt(2, Integer.valueOf(adminComment.getId()));
-//      }
-//    });
-//  }
+  public void updateQuestion(final Question question) {
+    String query = "UPDATE `academy_survey`.`question` SET `question` = ?, `option` = ? WHERE (`id` = ?)";
+    jdbcTemplate.update(query, new PreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps) throws SQLException {
+        ps.setString(1, question.getQuestion());
+        ps.setString(2, optionToJsonConverter.convertToDatabaseColumn(question.createOption()));
+        ps.setInt(3, Integer.valueOf(question.getId()));
+      }
+    });
+  }
 
+  public void deleteQuestion(final Question question) {
+    String query = "DELETE FROM `academy_survey`.`question` WHERE (`id` = ?)";
+    jdbcTemplate.update(query, question.getId());
+  }
 
 }

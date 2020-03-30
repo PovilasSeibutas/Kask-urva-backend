@@ -8,4 +8,7 @@ public interface QuestionService {
 
   void saveQuestion(Question question);
 
+  void updateQuestion(Question question);
+
+  void deleteQuestion(Question question);
 }

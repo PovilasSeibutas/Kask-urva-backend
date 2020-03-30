@@ -30,4 +30,14 @@ public class QuestionServiceImp implements QuestionService {
     questionRepository.createQuestion(question);
   }
 
+  @Override
+  public void updateQuestion(Question question) {
+    questionRepository.updateQuestion(question);
+  }
+
+  @Override
+  public void deleteQuestion(Question question) {
+    questionRepository.deleteQuestion(question);
+  }
+
 }
