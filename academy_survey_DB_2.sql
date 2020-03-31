@@ -9,6 +9,12 @@ CREATE TABLE `academy_survey`.`question` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_bin;
+
+-- table update in order to save option string
+ALTER TABLE `academy_survey`.`question` 
+DROP COLUMN `type`,
+ADD COLUMN `option` TEXT NULL AFTER `question`;
+
 CREATE TABLE `academy_survey`.`survey` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `time_stamp` INT(15) NOT NULL,
@@ -40,25 +46,127 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_bin;
 
+-- ADMINT testavimui:
+CREATE TABLE `academy_survey`.`admin` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  `pswd` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
 
+-- survey status keitimas admin_ID:
+
+ALTER TABLE `academy_survey`.`survey` 
+ADD COLUMN `admin_id` INT NOT NULL DEFAULT 0 AFTER `status`;
+
+-- create comment table
+CREATE TABLE `academy_survey`.`comment` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `survey_id` INT NOT NULL,
+  `admin_id` INT NOT NULL,
+  `comment` TEXT NOT NULL,
+  `time_stamp` INT(15) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `comment_survey_id_fk_idx` (`survey_id` ASC) VISIBLE,
+  INDEX `comment_admin_id_fk_idx` (`admin_id` ASC) VISIBLE,
+  CONSTRAINT `comment_survey_id_fk`
+    FOREIGN KEY (`survey_id`)
+    REFERENCES `academy_survey`.`survey` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `comment_admin_id_fk`
+    FOREIGN KEY (`admin_id`)
+    REFERENCES `academy_survey`.`admin` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE RESTRICT);
+    
+    -- create message table
+    
+    CREATE TABLE `academy_survey`.`message` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(45) NOT NULL,
+  `message` TEXT NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+-- status appended
+
+ALTER TABLE `academy_survey`.`message` 
+ADD COLUMN `status` INT NOT NULL DEFAULT 0 AFTER `message`;
+    
+    -- create message-outbox table
+
+CREATE TABLE `academy_survey`.`message_outbox` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `replay` TEXT NOT NULL,
+  `message_id` INT NOT NULL,
+  `admin_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `message_inbox_message_id_fk_idx` (`message_id` ASC) VISIBLE,
+  INDEX `message_inbox_admin_id_fk_idx` (`admin_id` ASC) VISIBLE,
+  CONSTRAINT `message_inbox_message_id_fk`
+    FOREIGN KEY (`message_id`)
+    REFERENCES `academy_survey`.`message` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `message_inbox_admin_id_fk`
+    FOREIGN KEY (`admin_id`)
+    REFERENCES `academy_survey`.`admin` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+-- edit fk;
+ALTER TABLE `academy_survey`.`message_outbox` 
+DROP FOREIGN KEY `message_inbox_message_id_fk`;
+ALTER TABLE `academy_survey`.`message_outbox` 
+ADD CONSTRAINT `message_inbox_message_id_fk`
+  FOREIGN KEY (`message_id`)
+  REFERENCES `academy_survey`.`message` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE RESTRICT;
+  
+  ALTER TABLE `academy_survey`.`message_outbox` 
+DROP FOREIGN KEY `message_inbox_admin_id_fk`,
+DROP FOREIGN KEY `message_inbox_message_id_fk`;
+ALTER TABLE `academy_survey`.`message_outbox` 
+CHANGE COLUMN `message_id` `message_id` INT(11) NULL ,
+CHANGE COLUMN `admin_id` `admin_id` INT(11) NULL ;
+ALTER TABLE `academy_survey`.`message_outbox` 
+ADD CONSTRAINT `message_inbox_admin_id_fk`
+  FOREIGN KEY (`admin_id`)
+  REFERENCES `academy_survey`.`admin` (`id`)
+  ON DELETE SET NULL
+  ON UPDATE RESTRICT,
+ADD CONSTRAINT `message_inbox_message_id_fk`
+  FOREIGN KEY (`message_id`)
+  REFERENCES `academy_survey`.`message` (`id`)
+  ON DELETE SET NULL
+  ON UPDATE RESTRICT;
 
 INSERT INTO `academy_survey`.`survey` (`time_stamp`) VALUES ('1584057600');
 
 INSERT INTO `academy_survey`.`survey` (`time_stamp`) VALUES ('1584121560');
 
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Vardas');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Pavardė');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Mobiliojo telefono numeris');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('email', 'El. paštas');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Mokymo įstaiga, kurioje šiuo metu mokaisi');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('textarea', 'O ką veiki, kai nesimokai? Kokie tavo pomėgiai?');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('radio', 'Ar bus galimybė pasirašyti trišalę praktikos sutartį?');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('textarea', 'Pakomentuok plačiau');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('radio', 'Numatytas praktikos laikas darbo dienomis 14-18 val. Ar galėsi akademijai');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('textarea', 'Kodėl nori dalyvauti IT akademijoje? Kas tave „veža“ joje');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('textarea', 'Kokios technologijos tau labiausiai patinka ir su kokiomis iš jų jau turi');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Jei teko dirbti prie konkretaus projekto, pasidalink jo nuoroda');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Iš kur sužinojai apie IT akademiją Swedbank?');
+
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Vardas', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Pavardė', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Mobiliojo telefono numeris', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('El. paštas', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Mokymo įstaiga, kurioje šiuo metu mokaisi', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('O ką veiki, kai nesimokai? Kokie tavo pomėgiai?', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Ar bus galimybė pasirašyti trišalę praktikos sutartį?', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Pakomentuok plačiau', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Numatytas praktikos laikas darbo dienomis 14-18 val. Ar galėsi akademijai', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Kodėl nori dalyvauti IT akademijoje? Kas tave „veža“ joje', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Kokios technologijos tau labiausiai patinka ir su kokiomis iš jų jau turi', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Jei teko dirbti prie konkretaus projekto, pasidalink jo nuoroda', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Iš kur sužinojai apie IT akademiją Swedbank?', "key: 'raktas', type: 'string', label: 'string', order: 0, value: 'string', options: [{value: 'string'}], required: true, extraField: 'string', controlType: 'string', showExtraField: true");
 
 
 INSERT INTO `academy_survey`.`answer` (`answer`, `question_id`, `survey_id`) VALUES ('Jonas', '1', '1');
