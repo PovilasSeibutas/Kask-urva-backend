@@ -25,9 +25,6 @@ public class QuestionController {
   @Autowired
   private QuestionService questionService;
 
-  @Autowired
-  private QuestionRepository questionRepository;
-
   @GetMapping
   public ResponseEntity<List<Question>> getAllQuestions() {
     List<Question> list = questionService.getAllQuestions();
@@ -36,7 +33,7 @@ public class QuestionController {
 
   @PostMapping
   public void saveQuestion(@RequestBody Question question) {
-    questionRepository.createQuestion(question);
+    questionService.saveQuestion(question);
   }
 
   @PutMapping
