@@ -20,11 +20,11 @@ public class QuestionRepository {
   }
 
   public List<Question> getAllQuestions() {
-    return jdbcTemplate.query("SELECT * FROM academy_survey.question", new QuestionRowMapper());
+    return jdbcTemplate.query("SELECT * FROM `question`", new QuestionRowMapper());
   }
 
   public void createQuestion(final Question question) {
-    String query = "INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ( ? , ? )";
+    String query = "INSERT INTO `question` (`question`, `option`) VALUES ( ? , ? )";
     jdbcTemplate.update(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
@@ -35,7 +35,7 @@ public class QuestionRepository {
   }
 
   public void updateQuestion(final Question question) {
-    String query = "UPDATE `academy_survey`.`question` SET `question` = ?, `option` = ? WHERE (`id` = ?)";
+    String query = "UPDATE `question` SET `question` = ?, `option` = ? WHERE (`id` = ?)";
     jdbcTemplate.update(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
@@ -47,7 +47,7 @@ public class QuestionRepository {
   }
 
   public void deleteQuestion(final Question question) {
-    String query = "DELETE FROM `academy_survey`.`question` WHERE (`id` = ?)";
+    String query = "DELETE FROM `question` WHERE (`id` = ?)";
     jdbcTemplate.update(query, question.getId());
   }
 
