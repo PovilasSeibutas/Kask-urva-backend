@@ -39,14 +39,14 @@ public class SubmissionRepository {
 
   public List<SubmissionForm> getAll() {
     String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
-        + "FROM academy_survey.survey s, academy_survey.answer a, academy_survey.question q\n"
+        + "FROM survey s, answer a, question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id";
     return jdbcTemplate.query(query, new SubRowMapper());
   }
 
   public void saveSubmissions(final List<Answer> answerList, Integer newSurveyId) {
     String query =
-        "INSERT INTO academy_survey.answer (answer, question_id, survey_id) VALUES (?, ?, ?)";
+        "INSERT INTO answer (answer, question_id, survey_id) VALUES (?, ?, ?)";
     jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -63,7 +63,7 @@ public class SubmissionRepository {
   }
 
   public void updateSubmissionStatus(final SubmissionStatus submissionStatus) {
-    String query = "UPDATE academy_survey.survey SET status = ?, admin_id = ? WHERE (id = ?)";
+    String query = "UPDATE survey SET status = ?, admin_id = ? WHERE (id = ?)";
     jdbcTemplate.update(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
@@ -76,10 +76,10 @@ public class SubmissionRepository {
 
   public List<SubmissionForm> sortSubmissionsByNameAZ() {
     String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
-        + "FROM academy_survey.survey s, academy_survey.answer a, academy_survey.question q\n"
+        + "FROM survey s, answer a, question q\n"
         + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid -- cai galima keisti tvarka\n"
-        + "from academy_survey.answer a1\n"
-        + "join academy_survey.answer a2\n"
+        + "from answer a1\n"
+        + "join answer a2\n"
         + "where a1.survey_id = a2.survey_id \n"
         + "\tand a1.question_id = 1\n"
         + "    and a2.question_id = 2  \n"
@@ -91,10 +91,10 @@ public class SubmissionRepository {
 
   public List<SubmissionForm> sortSubmissionsByNameZA() {
     String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
-        + "FROM academy_survey.survey s, academy_survey.answer a, academy_survey.question q\n"
+        + "FROM survey s, answer a, question q\n"
         + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid -- cai galima keisti tvarka\n"
-        + "from academy_survey.answer a1\n"
-        + "join academy_survey.answer a2\n"
+        + "from answer a1\n"
+        + "join answer a2\n"
         + "where a1.survey_id = a2.survey_id \n"
         + "\tand a1.question_id = 1\n"
         + "    and a2.question_id = 2  \n"
@@ -106,7 +106,7 @@ public class SubmissionRepository {
 
   public List<SubmissionForm> getSubmissionById(Integer id) {
     String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
-        + "FROM academy_survey.survey s, academy_survey.answer a, academy_survey.question q\n"
+        + "FROM survey s, answer a, question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = ?";
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
       @Override
@@ -121,7 +121,7 @@ public class SubmissionRepository {
     Map<String, List<String>> typeMap = new LinkedHashMap<>();
     List<String> typeList = new ArrayList<>();
     String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
-        + "FROM academy_survey.survey s, academy_survey.answer a, academy_survey.question q\n"
+        + "FROM survey s, answer a, question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id\n"
         + "having 1";
     for (String fs : submissionFilter.getFilterList()) {
