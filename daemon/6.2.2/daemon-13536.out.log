@@ -782,7 +782,7 @@ Execution failed for task ':bootRun'.
 > Process 'command 'C:\Program Files\JetBrains\IntelliJ IDEA 2019.2.3\jbr\bin\java.exe'' finished with non-zero exit value 1
 
 * Try:
-Run with --stacktrace optionJson to get the stack trace. Run with --info or --debug optionJson to get more log output. Run with --scan to get full insights.
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
 
 * Get more help at https://help.gradle.org
 
@@ -2273,7 +2273,7 @@ Execution failed for task ':bootRun'.
 > Process 'command 'C:\Program Files\JetBrains\IntelliJ IDEA 2019.2.3\jbr\bin\java.exe'' finished with non-zero exit value 1
 
 * Try:
-Run with --stacktrace optionJson to get the stack trace. Run with --info or --debug optionJson to get more log output. Run with --scan to get full insights.
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
 
 * Get more help at https://help.gradle.org
 
@@ -3335,7 +3335,7 @@ Execution failed for task ':bootRun'.
 > Process 'command 'C:\Program Files\JetBrains\IntelliJ IDEA 2019.2.3\jbr\bin\java.exe'' finished with non-zero exit value 1
 
 * Try:
-Run with --stacktrace optionJson to get the stack trace. Run with --info or --debug optionJson to get more log output. Run with --scan to get full insights.
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
 
 * Get more help at https://help.gradle.org
 
@@ -3712,7 +3712,7 @@ Execution failed for task ':bootRun'.
 > Build cancelled while executing task ':bootRun'
 
 * Try:
-Run with --stacktrace optionJson to get the stack trace. Run with --info or --debug optionJson to get more log output. Run with --scan to get full insights.
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
 
 * Get more help at https://help.gradle.org
 

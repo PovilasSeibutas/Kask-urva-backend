@@ -153,19 +153,20 @@ INSERT INTO `academy_survey`.`survey` (`time_stamp`) VALUES ('1584057600');
 
 INSERT INTO `academy_survey`.`survey` (`time_stamp`) VALUES ('1584121560');
 
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Vardas');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Pavardė');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Mobiliojo telefono numeris');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('email', 'El. paštas');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Mokymo įstaiga, kurioje šiuo metu mokaisi');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('textarea', 'O ką veiki, kai nesimokai? Kokie tavo pomėgiai?');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('radio', 'Ar bus galimybė pasirašyti trišalę praktikos sutartį?');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('textarea', 'Pakomentuok plačiau');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('radio', 'Numatytas praktikos laikas darbo dienomis 14-18 val. Ar galėsi akademijai');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('textarea', 'Kodėl nori dalyvauti IT akademijoje? Kas tave „veža“ joje');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('textarea', 'Kokios technologijos tau labiausiai patinka ir su kokiomis iš jų jau turi');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Jei teko dirbti prie konkretaus projekto, pasidalink jo nuoroda');
-INSERT INTO `academy_survey`.`question` (`type`, `question`) VALUES ('text', 'Iš kur sužinojai apie IT akademiją Swedbank?');
+
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Vardas', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Pavardė', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Mobiliojo telefono numeris', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('El. paštas', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Mokymo įstaiga, kurioje šiuo metu mokaisi', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('O ką veiki, kai nesimokai? Kokie tavo pomėgiai?', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Ar bus galimybė pasirašyti trišalę praktikos sutartį?', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Pakomentuok plačiau', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Numatytas praktikos laikas darbo dienomis 14-18 val. Ar galėsi akademijai', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Kodėl nori dalyvauti IT akademijoje? Kas tave „veža“ joje', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Kokios technologijos tau labiausiai patinka ir su kokiomis iš jų jau turi', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Jei teko dirbti prie konkretaus projekto, pasidalink jo nuoroda', '{\"key\": \"string\"}');
+INSERT INTO `academy_survey`.`question` (`question`, `option`) VALUES ('Iš kur sužinojai apie IT akademiją Swedbank?', '{\"key\": \"string\"}');
 
 
 INSERT INTO `academy_survey`.`answer` (`answer`, `question_id`, `survey_id`) VALUES ('Jonas', '1', '1');

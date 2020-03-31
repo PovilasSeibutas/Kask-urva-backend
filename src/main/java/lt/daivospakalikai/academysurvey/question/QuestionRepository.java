@@ -7,25 +7,19 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 
 @Service
 public class QuestionRepository {
 
   private JdbcTemplate jdbcTemplate;
-  private SimpleJdbcInsert simpleJdbcInsert;
-  private OptionToJsonConverter optionToJsonConverter;
 
   @Autowired
   public QuestionRepository(final DataSource dataSource) {
     jdbcTemplate = new JdbcTemplate(dataSource);
-    simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
-        .withTableName("question");
-    optionToJsonConverter = new OptionToJsonConverter();
   }
 
-  public List<QuestionFromDB> getAllQuestions() {
+  public List<Question> getAllQuestions() {
     return jdbcTemplate.query("SELECT * FROM academy_survey.question", new QuestionRowMapper());
   }
 
@@ -35,8 +29,7 @@ public class QuestionRepository {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
         ps.setString(1, question.getQuestion());
-        OptionToJsonConverter converter = new OptionToJsonConverter();
-        ps.setString(2, optionToJsonConverter.convertToDatabaseColumn(question.createOption()));
+        ps.setString(2, question.getOption());
       }
     });
   }
@@ -47,7 +40,7 @@ public class QuestionRepository {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
         ps.setString(1, question.getQuestion());
-        ps.setString(2, optionToJsonConverter.convertToDatabaseColumn(question.createOption()));
+        ps.setString(2, question.getOption());
         ps.setInt(3, Integer.valueOf(question.getId()));
       }
     });
@@ -57,5 +50,6 @@ public class QuestionRepository {
     String query = "DELETE FROM `academy_survey`.`question` WHERE (`id` = ?)";
     jdbcTemplate.update(query, question.getId());
   }
+
 
 }
