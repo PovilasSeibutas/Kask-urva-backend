@@ -10,15 +10,17 @@ public class Submission {
   private Integer id;
   private Integer status;
   private List<Answer> answers;
+  private String recaptchaToken;
 
   public Submission() {
   }
 
   public Submission(Integer id, Integer status,
-      List<Answer> answers) {
+      List<Answer> answers, String recaptchaToken) {
     this.id = id;
     this.status = status;
     this.answers = answers;
+    this.recaptchaToken = recaptchaToken;
   }
 
   public Integer getId() {
@@ -33,6 +35,10 @@ public class Submission {
     return answers;
   }
 
+  public String getRecaptchaToken() {
+    return recaptchaToken;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -44,12 +50,13 @@ public class Submission {
     Submission that = (Submission) o;
     return Objects.equals(id, that.id) &&
         Objects.equals(status, that.status) &&
-        Objects.equals(answers, that.answers);
+        Objects.equals(answers, that.answers) &&
+        Objects.equals(recaptchaToken, that.recaptchaToken);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, status, answers);
+    return Objects.hash(id, status, answers, recaptchaToken);
   }
 
   @Override
@@ -58,6 +65,7 @@ public class Submission {
         "id=" + id +
         ", status=" + status +
         ", answers=" + answers +
+        ", recaptchaToken=" + recaptchaToken +
         '}';
   }
 }

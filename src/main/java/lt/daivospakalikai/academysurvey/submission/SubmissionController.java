@@ -2,6 +2,9 @@ package lt.daivospakalikai.academysurvey.submission;
 
 import java.util.List;
 import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
+
+import lt.daivospakalikai.academysurvey.Captcha.CaptchaResponse;
+import lt.daivospakalikai.academysurvey.Captcha.CaptchaValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ public class SubmissionController {
   @Autowired
   SubmissionService submissionService;
 
+  @Autowired
+  CaptchaValidator captchaValidator;
+
   @GetMapping
   public ResponseEntity<List<Submission>> getAllSubmissions() {
     List<Submission> submissionList = submissionService.getAllSubmissions();
@@ -33,23 +39,27 @@ public class SubmissionController {
   }
 
   @PostMapping
-  public void saveSubmisions(@RequestBody Submission submission) {
+  public void saveSubmissions(@RequestBody Submission submission) throws Exception {
+    CaptchaResponse captchaResponse = captchaValidator.validateCaptcha(submission.getRecaptchaToken());
+    if(!captchaResponse.getSuccess()) {
+      throw new Exception("Captcha is not valid");
+    }
     submissionService.saveSubmissions(submission.getAnswers());
   }
 
   @PutMapping
-  public void updateSumbssionStatus(@RequestBody SubmissionStatus submissionStatus) {
+  public void updateSubmissionStatus(@RequestBody SubmissionStatus submissionStatus) {
     submissionService.updateSubmissionStatus(submissionStatus);
   }
 
   @GetMapping("/sorted-submissions-az")
-  public ResponseEntity<List<Submission>> getSortSubmisionsByNameAZ() {
+  public ResponseEntity<List<Submission>> getSortSubmissionsByNameAZ() {
     List<Submission> submissionList = submissionService.sortSubmissionsByNameAZ();
     return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
   }
 
   @GetMapping("/sorted-submissions-za")
-  public ResponseEntity<List<Submission>> getSortSubmisionsByNameZA() {
+  public ResponseEntity<List<Submission>> getSortSubmissionsByNameZA() {
     List<Submission> submissionList = submissionService.sortSubmissionsByNameZA();
     return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
   }
