@@ -148,3 +148,13 @@ ADD CONSTRAINT `message_inbox_message_id_fk`
   REFERENCES `3R2xfxnk9u`.`message` (`id`)
   ON DELETE SET NULL
   ON UPDATE RESTRICT;
+
+  CREATE TABLE `academy_survey`.`app_status` (
+  `id` INT NOT NULL,
+  `time_stamp` INT NULL,
+  `hashcode` TEXT NULL,
+  PRIMARY KEY (`id`));
+
+ALTER TABLE `academy_survey`.`app_status`
+ADD COLUMN `survey_id` INT NULL AFTER `hashcode`,
+CHANGE COLUMN `id` `id` INT NOT NULL AUTO_INCREMENT ;
