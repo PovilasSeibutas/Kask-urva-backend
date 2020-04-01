@@ -34,14 +34,16 @@ public class SubmissionRepository {
     sortFilterMap.put("questionId", "q.id");
     sortFilterMap.put("id", "s.id");
     sortFilterMap.put("status", "s.status");
+    sortFilterMap.put("gdprId", "s.gdpr_id");
+    sortFilterMap.put("option", "q.option");
 
   }
 
   public List<SubmissionForm> getAll() {
-    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
+    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
         + "FROM survey s, answer a, question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id";
-    return jdbcTemplate.query(query, new SubRowMapper());
+    return jdbcTemplate.query(query, new SubmissionFormRowMapper());
   }
 
   public void saveSubmissions(final List<Answer> answerList, Integer newSurveyId) {
@@ -75,9 +77,9 @@ public class SubmissionRepository {
   }
 
   public List<SubmissionForm> sortSubmissionsByNameAZ() {
-    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
+    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
         + "FROM survey s, answer a, question q\n"
-        + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid -- cai galima keisti tvarka\n"
+        + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid\n"
         + "from answer a1\n"
         + "join answer a2\n"
         + "where a1.survey_id = a2.survey_id \n"
@@ -86,13 +88,13 @@ public class SubmissionRepository {
         + "    and a1.question_id <> a2.question_id) c \n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = sid\n"
         + "order by combined";
-    return jdbcTemplate.query(query, new SubRowMapper());
+    return jdbcTemplate.query(query, new SubmissionFormRowMapper());
   }
 
   public List<SubmissionForm> sortSubmissionsByNameZA() {
-    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
+    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
         + "FROM survey s, answer a, question q\n"
-        + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid -- cai galima keisti tvarka\n"
+        + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid\n"
         + "from answer a1\n"
         + "join answer a2\n"
         + "where a1.survey_id = a2.survey_id \n"
@@ -101,11 +103,11 @@ public class SubmissionRepository {
         + "    and a1.question_id <> a2.question_id) c \n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = sid\n"
         + "order by combined desc";
-    return jdbcTemplate.query(query, new SubRowMapper());
+    return jdbcTemplate.query(query, new SubmissionFormRowMapper());
   }
 
   public List<SubmissionForm> getSubmissionById(Integer id) {
-    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
+    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
         + "FROM survey s, answer a, question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = ?";
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
@@ -113,14 +115,14 @@ public class SubmissionRepository {
       public void setValues(PreparedStatement ps) throws SQLException {
         ps.setInt(1, id);
       }
-    }, new SubRowMapper());
+    }, new SubmissionFormRowMapper());
   }
 
   public List<SubmissionForm> filterAndSortSubmissions(SubmissionFilter submissionFilter) {
     Map<String, String> filtersMap = new LinkedHashMap<>();
     Map<String, List<String>> typeMap = new LinkedHashMap<>();
     List<String> typeList = new ArrayList<>();
-    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer\n"
+    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
         + "FROM survey s, answer a, question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id\n"
         + "having 1";
@@ -162,7 +164,7 @@ public class SubmissionRepository {
           }
         }
       }
-    }, new SubRowMapper());
+    }, new SubmissionFormRowMapper());
   }
 
   private List<String> getFilteredValues(Map<String, List<String>> typeMap) {
