@@ -20,11 +20,11 @@ public class MessageRepository {
   }
 
   public List<Message> getAllMessages() {
-    return jdbcTemplate.query("SELECT * FROM academy_survey.message", new MessageRowMapper());
+    return jdbcTemplate.query("SELECT * FROM message", new MessageRowMapper());
   }
 
   public void createMessage(final Message message) {
-    String query = "INSERT INTO academy_survey.message ( email, message ) VALUES ( ? , ? )";
+    String query = "INSERT INTO message ( email, message ) VALUES ( ? , ? )";
     jdbcTemplate.update(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
@@ -35,12 +35,12 @@ public class MessageRepository {
   }
 
   public List<MessageOutbox> getAllReplays() {
-    return jdbcTemplate.query("SELECT * FROM academy_survey.message_outbox", new MessageOutboxRowMapper());
+    return jdbcTemplate.query("SELECT * FROM message_outbox", new MessageOutboxRowMapper());
   }
 
   public void replay(final MessageOutbox messageOutbox) {
     String query =
-        "INSERT INTO academy_survey.message_outbox (replay, message_id, admin_id) VALUES ( ? , ? , ? )";
+        "INSERT INTO message_outbox (replay, message_id, admin_id) VALUES ( ? , ? , ? )";
     jdbcTemplate.update(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
@@ -53,17 +53,17 @@ public class MessageRepository {
 
 
   public void deleteMessage(final Message message) {
-    String query = "DELETE FROM academy_survey.message WHERE (id = ? )";
+    String query = "DELETE FROM message WHERE (id = ? )";
     jdbcTemplate.update(query, message.getId());
   }
 
   public void deleteRelay(final MessageOutbox messageOutbox) {
-    String query = "DELETE FROM academy_survey.message_outbox WHERE (id = ? )";
+    String query = "DELETE FROM message_outbox WHERE (id = ? )";
     jdbcTemplate.update(query, messageOutbox.getId());
   }
 
   public void updateMessageStatus(final Message message) {
-    String query = "UPDATE academy_survey.message SET status = ? WHERE (id = ?)";
+    String query = "UPDATE message SET status = ? WHERE (id = ?)";
     jdbcTemplate.update(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
