@@ -17,15 +17,17 @@ class Answer {
   @JsonIgnore
   private Integer answerId;
   private String answer;
+  private String option;
 
   public Answer() {
   }
 
-  public Answer(Integer questionId, String question, Integer answerId, String answer) {
+  public Answer(Integer questionId, String question, Integer answerId, String answer, String option) {
     this.questionId = questionId;
     this.question = question;
     this.answerId = answerId;
     this.answer = answer;
+    this.option = option;
   }
 
   public Integer getQuestionId() {
@@ -44,6 +46,10 @@ class Answer {
     return answer;
   }
 
+  public String getOption() {
+    return option;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -56,21 +62,23 @@ class Answer {
     return Objects.equals(questionId, answer1.questionId) &&
         Objects.equals(question, answer1.question) &&
         Objects.equals(answerId, answer1.answerId) &&
-        Objects.equals(answer, answer1.answer);
+        Objects.equals(answer, answer1.answer) &&
+        Objects.equals(option, answer1.option);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(questionId, question, answerId, answer);
+    return Objects.hash(questionId, question, answerId, answer, option);
   }
 
   @Override
   public String toString() {
-    return "answer{" +
+    return "Answer{" +
         "questionId=" + questionId +
         ", question='" + question + '\'' +
         ", answerId=" + answerId +
         ", answer='" + answer + '\'' +
+        ", option='" + option + '\'' +
         '}';
   }
 }

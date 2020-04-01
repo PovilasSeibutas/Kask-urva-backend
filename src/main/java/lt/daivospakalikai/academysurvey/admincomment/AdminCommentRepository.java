@@ -27,7 +27,7 @@ public class AdminCommentRepository {
   }
 
   public List<AdminComment> getSumbissionComments(final AdminComment adminComment) {
-    String query = "SELECT * FROM academy_survey.comment WHERE survey_id = ? AND admin_id = ?";
+    String query = "SELECT * FROM comment WHERE survey_id = ? AND admin_id = ?";
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
@@ -48,7 +48,7 @@ public class AdminCommentRepository {
 
 
   public void updateComment(final AdminComment adminComment) {
-    String query = "UPDATE academy_survey.comment SET comment = ? WHERE id = ?;";
+    String query = "UPDATE comment SET comment = ? WHERE id = ?;";
     jdbcTemplate.update(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
@@ -59,7 +59,7 @@ public class AdminCommentRepository {
   }
 
   public void deleteComment(final AdminComment adminComment) {
-    String query = "DELETE FROM academy_survey.comment WHERE (id = ?)";
+    String query = "DELETE FROM comment WHERE (id = ?)";
     jdbcTemplate.update(query, adminComment.getId());
   }
 
