@@ -6,6 +6,8 @@ import lt.daivospakalikai.academysurvey.email_Send.EmailService;
 import lt.daivospakalikai.academysurvey.question.QuestionController;
 import lt.daivospakalikai.academysurvey.submission.Submission;
 import java.util.Date;
+
+import lt.daivospakalikai.academysurvey.submission.SubmissionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +36,17 @@ private SubmissionId submissionId;
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private SubmissionService submissionService;
+
 
     @GetMapping("/{hashId}")
-    public String getAllSubmission(@PathVariable String hashId) {
-
+    public Submission getAllSubmission(@PathVariable String hashId) throws Exception {
        submissionId = applicationStatusRepository.checkIfHashcodeExists(hashId);
-       String answer = submissionId.getSubmissionId().toString();
-        return answer;
+       if (submissionId.getSubmissionId() == null) {
+           throw new Exception("Page not found");
+       }
+        return submissionService.getSubmissionById(submissionId.getSubmissionId());
     }
 
     @PostMapping
@@ -57,6 +63,7 @@ private SubmissionId submissionId;
             String date = Long.toString(currentDate);
             String mash = submissionId.getSubmissionId() + "-" + date + "-" + submissionEmail;
             String hashedMash = bCrypt.passwordEncoder().encode(mash);
+            hashedMash = hashedMash.replace('/', 'F');
             String[] submissionEmails = {submissionEmail};
             emailService.sendEmail(submissionEmails, subject, text + "http://pls-run.herokuapp.com/application-status/" + hashedMash);
             applicationStatusRepository.saveApplicationHashcode(submissionId.getSubmissionId(), currentDate, hashedMash);

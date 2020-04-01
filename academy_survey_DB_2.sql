@@ -176,3 +176,16 @@ ADD CONSTRAINT `message_inbox_message_id_fk`
 ALTER TABLE `academy_survey`.`app_status`
 ADD COLUMN `survey_id` INT NULL AFTER `hashcode`,
 CHANGE COLUMN `id` `id` INT NOT NULL AUTO_INCREMENT ;
+
+CREATE TABLE `academy_survey`.`gdpr` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `agreement` TEXT NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+ALTER TABLE `academy_survey`.`survey`
+ADD COLUMN `gdpr_id` INT NOT NULL AFTER `admin_id`;
+ALTER TABLE `academy_survey`.`survey`
+CHANGE COLUMN `gdpr_id` `gdpr_id` INT(11) NULL DEFAULT 0 ;

@@ -10,7 +10,7 @@ public interface MessageService {
 
   List<MessageOutbox> getAllReplays();
 
-  void replay(MessageOutbox messageOutbox);
+  void replay(MessageOutbox messageOutbox) throws Exception;
 
   void deleteMessage(Message message);
 

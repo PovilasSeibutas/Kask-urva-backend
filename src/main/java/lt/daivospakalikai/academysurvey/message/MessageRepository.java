@@ -51,6 +51,26 @@ public class MessageRepository {
     });
   }
 
+  public String getUsersEmail(final Integer messageId) {
+    String query = "SELECT email FROM message LEFT JOIN message_outbox ON message.id = message_outbox.message_id WHERE message_id = ? ";
+    return jdbcTemplate.query(query, new PreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps) throws SQLException {
+        ps.setInt(1, messageId);
+      }
+    }, new EmailRowMapper()).get(0).getEmail();
+  }
+
+  public String getMessageText(final Integer messageId) {
+    String query = "SELECT * FROM message_outbox WHERE message_id = ? ";
+    return jdbcTemplate.query(query, new PreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps) throws SQLException {
+        ps.setInt(1, messageId);
+      }
+    }, new MessageOutboxRowMapper()).get(0).getReplay();
+  }
+
 
   public void deleteMessage(final Message message) {
     String query = "DELETE FROM message WHERE (id = ? )";

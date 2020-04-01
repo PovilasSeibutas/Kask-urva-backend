@@ -44,7 +44,6 @@ public class ApplicationStatusRepository {
 
     public SubmissionId checkIfHashcodeExists(String hashcode) {
         String query = "SELECT survey_id FROM app_status WHERE hashcode = ? ";
-        System.out.println(query);
        return jdbcTemplate.query(query, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
