@@ -44,7 +44,7 @@ public class SubmissionController {
     if(!captchaResponse.getSuccess()) {
       throw new Exception("Captcha is not valid");
     }
-    submissionService.saveSubmissions(submission.getAnswers());
+    submissionService.saveSubmissions(submission);
   }
 
   @PutMapping
