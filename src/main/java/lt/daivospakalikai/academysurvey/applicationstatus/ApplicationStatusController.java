@@ -54,7 +54,7 @@ private SubmissionId submissionId;
         String submissionRecaptchaToken = applicationStatusRequest.getRecaptchaToken();
         String submissionEmail = applicationStatusRequest.getEmail();
         CaptchaResponse captchaResponse = captchaValidator.validateCaptcha(submissionRecaptchaToken);
-        if (captchaResponse.getSuccess()) {
+        if (!captchaResponse.getSuccess()) {
             throw new Exception("Captcha is not valid");
         }
 
