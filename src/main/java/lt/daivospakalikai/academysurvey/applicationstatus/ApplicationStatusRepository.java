@@ -31,7 +31,7 @@ public class ApplicationStatusRepository {
 
     public void saveApplicationHashcode(Integer id, Long timestamp, String hashcode) {
         String query =
-                "INSERT INTO `academy_survey`.`app_status` (`survey_id`, `time_stamp`, `hashcode`) VALUES ( ? , ? , ? )";
+                "INSERT INTO app_status (survey_id, time_stamp, hashcode) VALUES ( ? , ? , ? )";
         jdbcTemplate.update(query, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
