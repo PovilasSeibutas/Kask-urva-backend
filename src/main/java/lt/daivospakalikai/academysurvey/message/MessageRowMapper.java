@@ -11,8 +11,8 @@ public class MessageRowMapper implements RowMapper<Message> {
     return new Message(
         rs.getInt("id"),
         rs.getString("email"),
-        rs.getString("message")
+        rs.getString("message"),
+        rs.getInt("status")
     );
   }
 }
-

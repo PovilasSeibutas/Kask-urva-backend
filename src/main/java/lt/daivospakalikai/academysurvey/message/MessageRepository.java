@@ -20,11 +20,11 @@ public class MessageRepository {
   }
 
   public List<Message> getAllMessages() {
-    return jdbcTemplate.query("SELECT * FROM academy_survey.message", new MessageRowMapper());
+    return jdbcTemplate.query("SELECT * FROM message", new MessageRowMapper());
   }
 
   public void createMessage(final Message message) {
-    String query = "INSERT INTO academy_survey.message ( email, message ) VALUES ( ? , ? )";
+    String query = "INSERT INTO message ( email, message ) VALUES ( ? , ? )";
     jdbcTemplate.update(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
@@ -60,6 +60,17 @@ public class MessageRepository {
   public void deleteRelay(final MessageOutbox messageOutbox) {
     String query = "DELETE FROM message_outbox WHERE (id = ? )";
     jdbcTemplate.update(query, messageOutbox.getId());
+  }
+
+  public void updateMessageStatus(final Message message) {
+    String query = "UPDATE message SET status = ? WHERE (id = ?)";
+    jdbcTemplate.update(query, new PreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps) throws SQLException {
+        ps.setInt(1, message.getStatus());
+        ps.setInt(2, message.getId());
+      }
+    });
   }
 
 }

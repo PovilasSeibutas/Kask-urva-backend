@@ -47,4 +47,9 @@ public class MessageController {
     messageService.deleteReplay(messageOutbox);
   }
 
+  @PutMapping
+  public void updateMessageSatuts(@RequestBody Message message) {
+    messageService.updateMessageStatus(message);
+  }
+
 }
