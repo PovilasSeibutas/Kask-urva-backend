@@ -16,4 +16,6 @@ public interface MessageService {
 
   void deleteReplay(MessageOutbox messageOutbox);
 
+  void updateMessageStatus(Message message);
+
 }

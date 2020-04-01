@@ -5,11 +5,13 @@ public class Message {
   private Integer id;
   private String email;
   private String message;
+  private Integer status;
 
-  public Message(Integer id, String email, String message) {
+  public Message(Integer id, String email, String message, Integer status) {
     this.id = id;
     this.email = email;
     this.message = message;
+    this.status = status;
   }
 
   public Integer getId() {
@@ -24,4 +26,7 @@ public class Message {
     return message;
   }
 
+  public Integer getStatus() {
+    return status;
+  }
 }
