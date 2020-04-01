@@ -15,6 +15,16 @@ ALTER TABLE `3R2xfxnk9u`.`question`
 DROP COLUMN `type`,
 ADD COLUMN `option` TEXT NULL AFTER `question`;
 
+-- create GDPR agreemnet table
+
+CREATE TABLE `3R2xfxnk9u`.`gdpr` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `agreement` TEXT NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
 CREATE TABLE `3R2xfxnk9u`.`survey` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `time_stamp` INT(15) NOT NULL,
@@ -23,6 +33,14 @@ CREATE TABLE `3R2xfxnk9u`.`survey` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_bin;
+
+-- GDPR id added
+
+ALTER TABLE `3R2xfxnk9u`.`survey`
+ADD COLUMN `gdpr_id` INT NOT NULL AFTER `admin_id`;
+
+ALTER TABLE `3R2xfxnk9u`.`survey`
+CHANGE COLUMN `gdpr_id` `gdpr_id` INT(11) NULL DEFAULT 0 ;
 
 CREATE TABLE `3R2xfxnk9u`.`answer` (
   `id` INT NOT NULL AUTO_INCREMENT,

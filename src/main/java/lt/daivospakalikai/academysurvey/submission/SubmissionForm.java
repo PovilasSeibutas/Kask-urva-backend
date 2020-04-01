@@ -10,18 +10,22 @@ public class SubmissionForm {
   private String question;
   private Integer answerId;
   private String answer;
+  private Integer gdprId;
+  private String option;
 
   public SubmissionForm() {
   }
 
   public SubmissionForm(Integer id, Integer status, Integer questionId, String question, Integer answerId,
-      String answer) {
+      String answer, Integer gdprId, String option) {
     this.id = id;
     this.status = status;
     this.questionId = questionId;
     this.question = question;
     this.answerId = answerId;
     this.answer = answer;
+    this.gdprId = gdprId;
+    this.option = option;
   }
 
   public Integer getId() {
@@ -48,8 +52,16 @@ public class SubmissionForm {
     return status;
   }
 
+  public Integer getGdprId() {
+    return gdprId;
+  }
+
+  public String getOption() {
+    return option;
+  }
+
   public Answer createNewAnswer() {
-    return new Answer(getQuestionId(), getQuestion(), getAnswerId(), getAnswer());
+    return new Answer(getQuestionId(), getQuestion(), getAnswerId(), getAnswer(), getOption());
   }
 
   @Override
@@ -66,12 +78,14 @@ public class SubmissionForm {
         Objects.equals(questionId, that.questionId) &&
         Objects.equals(question, that.question) &&
         Objects.equals(answerId, that.answerId) &&
-        Objects.equals(answer, that.answer);
+        Objects.equals(answer, that.answer) &&
+        Objects.equals(gdprId, that.gdprId) &&
+        Objects.equals(option, that.option);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, status, questionId, question, answerId, answer);
+    return Objects.hash(id, status, questionId, question, answerId, answer, gdprId, option);
   }
 
   @Override
@@ -83,6 +97,8 @@ public class SubmissionForm {
         ", question='" + question + '\'' +
         ", answerId=" + answerId +
         ", answer='" + answer + '\'' +
+        ", gdprId=" + gdprId +
+        ", option='" + option + '\'' +
         '}';
   }
 }
