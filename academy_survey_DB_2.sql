@@ -39,7 +39,7 @@ COLLATE = utf8_bin;
 ALTER TABLE `3R2xfxnk9u`.`survey`
 ADD COLUMN `gdpr_id` INT NOT NULL AFTER `admin_id`;
 
-ALTER TABLE `academy_survey`.`survey`
+ALTER TABLE `3R2xfxnk9u`.`survey`
 CHANGE COLUMN `gdpr_id` `gdpr_id` INT(11) NULL DEFAULT 0 ;
 
 CREATE TABLE `3R2xfxnk9u`.`answer` (
