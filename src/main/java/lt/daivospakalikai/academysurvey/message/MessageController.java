@@ -1,6 +1,9 @@
 package lt.daivospakalikai.academysurvey.message;
 
 import java.util.List;
+
+import lt.daivospakalikai.academysurvey.Captcha.CaptchaResponse;
+import lt.daivospakalikai.academysurvey.Captcha.CaptchaValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,13 +22,24 @@ public class MessageController {
   @Autowired
   MessageService messageService;
 
+  @Autowired
+  private CaptchaValidator captchaValidator;
+
   @GetMapping
   public List<Message> getAllMessages() {
     return messageService.getAllMessages();
   }
 
   @PostMapping
-  public void sendMessage(@RequestBody Message message) {
+  public void sendMessage(@RequestBody MessageRequest messageRequest) throws Exception {
+    String submissionRecaptchaToken = messageRequest.getRecaptchaToken();
+    CaptchaResponse captchaResponse = captchaValidator.validateCaptcha(submissionRecaptchaToken);
+    if (!captchaResponse.getSuccess()) {
+      throw new Exception("Captcha is not valid");
+    }
+
+    Message message = new Message(messageRequest.getEmail(), messageRequest.getMessage());
+
     messageService.createMessage(message);
   }
 

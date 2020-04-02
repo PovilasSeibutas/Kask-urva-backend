@@ -14,6 +14,11 @@ public class Message {
     this.status = status;
   }
 
+  public Message(String email, String message) {
+    this.email = email;
+    this.message = message;
+  }
+
   public Integer getId() {
     return id;
   }
@@ -29,4 +34,5 @@ public class Message {
   public Integer getStatus() {
     return status;
   }
+
 }
