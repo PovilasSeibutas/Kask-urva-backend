@@ -11,7 +11,6 @@ import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import lt.daivospakalikai.academysurvey.survey.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class SubmissionServiceImp implements SubmissionService {
@@ -32,7 +31,7 @@ public class SubmissionServiceImp implements SubmissionService {
   @Override
   public void saveSubmissions(Submission submission) {
     submissionRepository.saveSubmissions(submission.getAnswers(), surveyService.createSurvey(submission.getGdprId()));
-//    emailService.sendNotificationEmailToAdmin();
+    emailService.sendNotificationEmailToAdmin();
   }
 
   @Override

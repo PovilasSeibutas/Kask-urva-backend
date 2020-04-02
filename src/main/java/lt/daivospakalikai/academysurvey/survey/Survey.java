@@ -35,7 +35,6 @@ public class Survey implements Serializable {
   @Column(name = "status")
   private int status;
   @Basic(optional = false)
-  @NotNull
   @Column(name = "gdpr_id")
   private Integer gdprId;
   @JsonIgnore
