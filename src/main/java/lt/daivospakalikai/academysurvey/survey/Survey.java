@@ -34,6 +34,10 @@ public class Survey implements Serializable {
   @NotNull
   @Column(name = "status")
   private int status;
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "gdpr_id")
+  private Integer gdprId;
   @JsonIgnore
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "survey")
   private List<Answer> answerList;
@@ -45,8 +49,9 @@ public class Survey implements Serializable {
     this.id = id;
   }
 
-  public Survey(@NotNull Long timeStamp) {
+  public Survey(@NotNull Long timeStamp, @NotNull Integer gdprId) {
     this.timeStamp = timeStamp;
+    this.gdprId = gdprId;
   }
 
   public Survey(Integer id, @NotNull Long timeStamp, @NotNull int status) {
@@ -71,6 +76,10 @@ public class Survey implements Serializable {
     return answerList;
   }
 
+  public Integer getGdprId() {
+    return gdprId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -83,21 +92,23 @@ public class Survey implements Serializable {
     return status == survey.status &&
         Objects.equals(id, survey.id) &&
         Objects.equals(timeStamp, survey.timeStamp) &&
+        Objects.equals(gdprId, survey.gdprId) &&
         Objects.equals(answerList, survey.answerList);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timeStamp, status, answerList);
+    return Objects.hash(id, timeStamp, status, gdprId, answerList);
   }
 
   @Override
   public String toString() {
-    return "survey{" +
+    return "Survey{" +
         "id=" + id +
         ", timeStamp=" + timeStamp +
         ", status=" + status +
-        ", answerSet=" + answerList +
+        ", gdprId=" + gdprId +
+        ", answerList=" + answerList +
         '}';
   }
 }

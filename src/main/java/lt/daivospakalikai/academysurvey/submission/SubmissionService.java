@@ -7,7 +7,7 @@ public interface SubmissionService {
 
   List<Submission> getAllSubmissions();
 
-  void saveSubmissions(List<Answer> answerList);
+  void saveSubmissions(Submission submission);
 
   void updateSubmissionStatus(SubmissionStatus submissionStatus);
 

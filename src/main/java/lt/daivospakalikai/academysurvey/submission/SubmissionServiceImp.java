@@ -30,8 +30,8 @@ public class SubmissionServiceImp implements SubmissionService {
   }
 
   @Override
-  public void saveSubmissions(@RequestBody List<Answer> answerList) {
-    submissionRepository.saveSubmissions(answerList, surveyService.createSurvey());
+  public void saveSubmissions(Submission submission) {
+    submissionRepository.saveSubmissions(submission.getAnswers(), surveyService.createSurvey(submission.getGdprId()));
 //    emailService.sendNotificationEmailToAdmin();
   }
 
