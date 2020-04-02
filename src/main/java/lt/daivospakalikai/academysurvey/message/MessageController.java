@@ -35,7 +35,7 @@ public class MessageController {
   }
 
   @PostMapping("/replays")
-  public void replayMessage(@RequestBody MessageOutbox messageOutbox) {
+  public void replayMessage(@RequestBody MessageOutbox messageOutbox) throws Exception {
     messageService.replay(messageOutbox);
   }
 

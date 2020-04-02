@@ -1,14 +1,20 @@
 package lt.daivospakalikai.academysurvey.message;
 
 import java.util.List;
+
+import lt.daivospakalikai.academysurvey.email_Send.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MessageServiceImp implements MessageService {
+  private String subject = "IT Akademija";
 
   @Autowired
   MessageRepository messageRepository;
+
+  @Autowired
+  EmailService emailService;
 
   @Override
   public List<Message> getAllMessages() {
@@ -26,8 +32,15 @@ public class MessageServiceImp implements MessageService {
   }
 
   @Override
-  public void replay(MessageOutbox messageOutbox) {
+  public void replay(MessageOutbox messageOutbox) throws Exception {
+    try {
     messageRepository.replay(messageOutbox);
+      String[] email = {messageRepository.getUsersEmail(messageOutbox.getMessageId())};
+      String message = messageRepository.getMessageText(messageOutbox.getMessageId());
+      emailService.sendEmail(email, subject, message);
+    } catch (Exception e) {
+      throw new Exception("Something went wrong.");
+    }
   }
 
   @Override

@@ -109,7 +109,7 @@ public class SubmissionRepository {
   public List<SubmissionForm> getSubmissionById(Integer id) {
     String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
         + "FROM survey s, answer a, question q\n"
-        + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = ?";
+        + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = ? ";
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
