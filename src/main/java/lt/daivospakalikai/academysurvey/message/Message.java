@@ -7,9 +7,8 @@ public class Message {
   private String message;
   private Integer status;
 
-  public Message() {
-  }
-
+  public Message() {}
+  
   public Message(Integer id, String email, String message, Integer status) {
     this.id = id;
     this.email = email;
