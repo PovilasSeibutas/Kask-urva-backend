@@ -11,7 +11,7 @@ public class AdminCommentServiceImp implements AdminCommentService {
   AdminCommentRepository adminCommentRepository;
 
   @Override
-  public List<AdminComment> getComments(AdminComment adminComment) {
+  public List<AdminCommentResponse> getComments(AdminComment adminComment) {
     return adminCommentRepository.getSumbissionComments(adminComment);
   }
 
