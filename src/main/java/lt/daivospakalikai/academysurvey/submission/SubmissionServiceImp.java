@@ -31,7 +31,7 @@ public class SubmissionServiceImp implements SubmissionService {
   @Override
   public void saveSubmissions(Submission submission) {
     submissionRepository.saveSubmissions(submission.getAnswers(), surveyService.createSurvey(submission.getGdprId()));
-    emailService.sendNotificationEmailToAdmin();
+//    emailService.sendNotificationEmailToAdmin();
   }
 
   @Override
@@ -63,6 +63,11 @@ public class SubmissionServiceImp implements SubmissionService {
     return getDataFromDB(submissionMap, submissionRepository.filterAndSortSubmissions(submissionFilter));
   }
 
+  @Override
+  public void deleteSubmission(List<Integer> submissionList) {
+    submissionRepository.deleteSubmission(submissionList);
+  }
+
   private ArrayList<Submission> getDataFromDB(Map<Integer, Submission> map,
       List<SubmissionForm> submissionFormList) {
     for (SubmissionForm s : submissionFormList) {
@@ -71,7 +76,8 @@ public class SubmissionServiceImp implements SubmissionService {
             .add(s.createNewAnswer());
       } else {
         map.put(s.getId(),
-            new Submission(s.getId(), s.getStatus(), s.getGdprId(), new ArrayList(Arrays.asList(s.createNewAnswer()))
+            new Submission(s.getId(), s.getStatus(), s.getGdprId(), s.getTimeStamp(),
+                new ArrayList(Arrays.asList(s.createNewAnswer()))
                 , null));
       }
     }

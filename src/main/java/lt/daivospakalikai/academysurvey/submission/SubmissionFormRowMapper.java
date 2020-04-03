@@ -17,7 +17,8 @@ public class SubmissionFormRowMapper implements RowMapper<SubmissionForm> {
         rs.getInt("aid"),
         rs.getString("answer"),
         rs.getInt("qid"),
-        rs.getString("option")
+        rs.getString("option"),
+        rs.getLong("time_stamp")
     );
   }
 

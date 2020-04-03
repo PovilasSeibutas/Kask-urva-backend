@@ -18,4 +18,6 @@ public interface SubmissionService {
   Submission getSubmissionById(Integer id);
 
   List<Submission> filterAndSortSubmissions(SubmissionFilter submissionFilter);
+
+  void deleteSubmission(List<Integer> submissionList);
 }

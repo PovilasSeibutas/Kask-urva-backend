@@ -36,11 +36,13 @@ public class SubmissionRepository {
     sortFilterMap.put("status", "s.status");
     sortFilterMap.put("gdprId", "s.gdpr_id");
     sortFilterMap.put("option", "q.option");
+    sortFilterMap.put("timeStamp", "s.time_stamp,");
 
   }
 
   public List<SubmissionForm> getAll() {
-    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
+    String query = "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, "
+        + "s.gdpr_id as gid, q.option\n"
         + "FROM survey s, answer a, question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id";
     return jdbcTemplate.query(query, new SubmissionFormRowMapper());
@@ -77,39 +79,44 @@ public class SubmissionRepository {
   }
 
   public List<SubmissionForm> sortSubmissionsByNameAZ() {
-    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
-        + "FROM survey s, answer a, question q\n"
-        + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid\n"
-        + "from answer a1\n"
-        + "join answer a2\n"
-        + "where a1.survey_id = a2.survey_id \n"
-        + "\tand a1.question_id = 1\n"
-        + "    and a2.question_id = 2  \n"
-        + "    and a1.question_id <> a2.question_id) c \n"
-        + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = sid\n"
-        + "order by combined";
+    String query =
+        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as "
+            + "gid, q.option\n"
+            + "FROM survey s, answer a, question q\n"
+            + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid\n"
+            + "from answer a1\n"
+            + "join answer a2\n"
+            + "where a1.survey_id = a2.survey_id \n"
+            + "\tand a1.question_id = 1\n"
+            + "    and a2.question_id = 2  \n"
+            + "    and a1.question_id <> a2.question_id) c \n"
+            + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = sid\n"
+            + "order by combined";
     return jdbcTemplate.query(query, new SubmissionFormRowMapper());
   }
 
   public List<SubmissionForm> sortSubmissionsByNameZA() {
-    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
-        + "FROM survey s, answer a, question q\n"
-        + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid\n"
-        + "from answer a1\n"
-        + "join answer a2\n"
-        + "where a1.survey_id = a2.survey_id \n"
-        + "\tand a1.question_id = 1\n"
-        + "    and a2.question_id = 2  \n"
-        + "    and a1.question_id <> a2.question_id) c \n"
-        + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = sid\n"
-        + "order by combined desc";
+    String query =
+        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as "
+            + "gid, q.option\n"
+            + "FROM survey s, answer a, question q\n"
+            + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid\n"
+            + "from answer a1\n"
+            + "join answer a2\n"
+            + "where a1.survey_id = a2.survey_id \n"
+            + "\tand a1.question_id = 1\n"
+            + "    and a2.question_id = 2  \n"
+            + "    and a1.question_id <> a2.question_id) c \n"
+            + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = sid\n"
+            + "order by combined desc";
     return jdbcTemplate.query(query, new SubmissionFormRowMapper());
   }
 
   public List<SubmissionForm> getSubmissionById(Integer id) {
-    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
-        + "FROM survey s, answer a, question q\n"
-        + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = ? ";
+    String query =
+        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
+            + "FROM survey s, answer a, question q\n"
+            + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = ? ";
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
@@ -118,14 +125,31 @@ public class SubmissionRepository {
     }, new SubmissionFormRowMapper());
   }
 
+  public void deleteSubmission (List<Integer> submissionIdList){
+    String query = "DELETE FROM survey WHERE (id = ? )";
+    jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps, int i) throws SQLException {
+        ps.setInt(1, submissionIdList.get(i));
+      }
+      @Override
+      public int getBatchSize() {
+        return submissionIdList.size();
+      }
+    });
+
+  }
+
   public List<SubmissionForm> filterAndSortSubmissions(SubmissionFilter submissionFilter) {
     Map<String, String> filtersMap = new LinkedHashMap<>();
     Map<String, List<String>> typeMap = new LinkedHashMap<>();
     List<String> typeList = new ArrayList<>();
-    String query = "SELECT s.id as sid, s.status, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
-        + "FROM survey s, answer a, question q\n"
-        + "WHERE s.id = a.survey_id AND q.id = a.question_id\n"
-        + "having 1";
+    String query =
+        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as "
+            + "gid, q.option\n"
+            + "FROM survey s, answer a, question q\n"
+            + "WHERE s.id = a.survey_id AND q.id = a.question_id\n"
+            + "having 1";
     for (String fs : submissionFilter.getFilterList()) {
       String key = Array.get(fs.split("="), 0).toString();
       String value = Array.get(fs.split("="), 1).toString();
