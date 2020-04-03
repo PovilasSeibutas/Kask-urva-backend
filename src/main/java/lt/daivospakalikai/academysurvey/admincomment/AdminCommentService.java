@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface AdminCommentService {
 
-  List<AdminComment> getComments(AdminComment adminComment);
+  List<AdminCommentResponse> getComments(AdminComment adminComment);
 
   void updateComment(AdminComment adminComment);
 
