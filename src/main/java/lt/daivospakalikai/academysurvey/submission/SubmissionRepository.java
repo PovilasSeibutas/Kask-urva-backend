@@ -125,19 +125,33 @@ public class SubmissionRepository {
     }, new SubmissionFormRowMapper());
   }
 
-  public void deleteSubmission (List<Integer> submissionIdList){
+  public void deleteSubmission(List<Integer> submissionIdList) {
     String query = "DELETE FROM survey WHERE (id = ? )";
     jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps, int i) throws SQLException {
         ps.setInt(1, submissionIdList.get(i));
       }
+
       @Override
       public int getBatchSize() {
         return submissionIdList.size();
       }
     });
 
+  }
+
+  public void deleteSubmissionsByDate(List<Long> timeStampList) {
+    if (timeStampList.size() == 2) {
+      String query = "DELETE FROM survey WHERE (time_stamp >= ? AND time_stamp <= ?)";
+      jdbcTemplate.update(query, new PreparedStatementSetter() {
+        @Override
+        public void setValues(PreparedStatement ps) throws SQLException {
+          ps.setLong(1, timeStampList.get(0));
+          ps.setLong(2, timeStampList.get(1));
+        }
+      });
+    }
   }
 
   public List<SubmissionForm> filterAndSortSubmissions(SubmissionFilter submissionFilter) {
