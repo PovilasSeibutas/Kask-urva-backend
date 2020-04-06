@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HelloResource {
@@ -28,6 +30,8 @@ public class HelloResource {
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+        Date date = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10);
+
         customValidation.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.getUsername(),
@@ -37,9 +41,9 @@ public class HelloResource {
 
         final UserDetails userDetails = myUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
+        final String jwt = jwtTokenUtil.generateToken(userDetails, date);
 
-        return ResponseEntity.ok(myUserDetailsService.makeResponse(jwt, authenticationRequest.getUsername()));
+        return ResponseEntity.ok(myUserDetailsService.makeResponse(jwt, authenticationRequest.getUsername(), date));
     }
 }
 

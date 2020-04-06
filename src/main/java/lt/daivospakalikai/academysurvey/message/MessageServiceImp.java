@@ -2,7 +2,7 @@ package lt.daivospakalikai.academysurvey.message;
 
 import java.util.List;
 
-import lt.daivospakalikai.academysurvey.email_Send.EmailService;
+import lt.daivospakalikai.academysurvey.emailsend.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

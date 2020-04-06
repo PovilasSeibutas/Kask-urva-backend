@@ -143,7 +143,7 @@ public class SubmissionRepository {
 
   public void deleteSubmissionsByDate(List<Long> timeStampList) {
     if (timeStampList.size() == 2) {
-      String query = "DELETE FROM survey WHERE (time_stamp >= ? AND time_stamp <= ?)";
+      String query = "DELETE FROM survey WHERE (time_stamp >= ? AND time_stamp <= ? AND id<>0";
       jdbcTemplate.update(query, new PreparedStatementSetter() {
         @Override
         public void setValues(PreparedStatement ps) throws SQLException {

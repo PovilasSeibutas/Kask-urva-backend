@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService  {
@@ -30,7 +31,7 @@ public class MyUserDetailsService implements UserDetailsService  {
 
     }
 
-    public Object makeResponse(String jwt, String username) {
+    public Object makeResponse(String jwt, String username, Date date) {
 
         Admin admin = adminRepository.getAdmin(username);
 
@@ -43,6 +44,7 @@ public class MyUserDetailsService implements UserDetailsService  {
         response.setAdminId(admin.getId());
         response.setName(admin.getName());
         response.setSurname(admin.getSurname());
+        response.setDate(date);
 
         return response;
 
