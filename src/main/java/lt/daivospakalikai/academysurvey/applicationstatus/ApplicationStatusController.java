@@ -42,7 +42,8 @@ private SubmissionId submissionId;
 
     @GetMapping("/{hashId}")
     public Submission getAllSubmission(@PathVariable String hashId) throws Exception {
-       submissionId = applicationStatusRepository.checkIfHashcodeExists(hashId);
+        String hashedId = "$2a$10$" + hashId;
+       submissionId = applicationStatusRepository.checkIfHashcodeExists(hashedId);
        if (submissionId.getSubmissionId() == null) {
            throw new Exception("Page not found");
        }
@@ -65,7 +66,7 @@ private SubmissionId submissionId;
             String hashedMash = bCrypt.passwordEncoder().encode(mash);
             hashedMash = hashedMash.replace('/', 'F');
             String[] submissionEmails = {submissionEmail};
-            emailService.sendEmail(submissionEmails, subject, text + "http://pls-run.herokuapp.com/application-status/" + hashedMash);
+            emailService.sendEmail(submissionEmails, subject, text + "http://pls-run.herokuapp.com/application-status/" + hashedMash.substring(7));
             applicationStatusRepository.saveApplicationHashcode(submissionId.getSubmissionId(), currentDate, hashedMash);
 
     }
