@@ -1,4 +1,4 @@
-package lt.daivospakalikai.academysurvey.email_Send;
+package lt.daivospakalikai.academysurvey.emailsend;
 
 import java.util.ArrayList;
 

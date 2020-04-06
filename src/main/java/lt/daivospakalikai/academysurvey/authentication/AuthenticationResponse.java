@@ -1,11 +1,14 @@
 package lt.daivospakalikai.academysurvey.authentication;
 
+import java.util.Date;
+
 public class AuthenticationResponse {
 
     private String jwt;
     private int adminId;
     private String name;
     private String surname;
+    private Date date;
 
     public AuthenticationResponse() {
 
@@ -41,5 +44,13 @@ public class AuthenticationResponse {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

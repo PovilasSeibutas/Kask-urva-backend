@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import lt.daivospakalikai.academysurvey.email_Send.EmailService;
+import lt.daivospakalikai.academysurvey.emailsend.EmailService;
 import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import lt.daivospakalikai.academysurvey.survey.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;

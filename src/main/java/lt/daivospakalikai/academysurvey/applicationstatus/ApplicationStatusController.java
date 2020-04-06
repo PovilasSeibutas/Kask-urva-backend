@@ -2,7 +2,7 @@ package lt.daivospakalikai.academysurvey.applicationstatus;
 
 import lt.daivospakalikai.academysurvey.Captcha.CaptchaResponse;
 import lt.daivospakalikai.academysurvey.Captcha.CaptchaValidator;
-import lt.daivospakalikai.academysurvey.email_Send.EmailService;
+import lt.daivospakalikai.academysurvey.emailsend.EmailService;
 import lt.daivospakalikai.academysurvey.question.QuestionController;
 import lt.daivospakalikai.academysurvey.submission.Submission;
 import java.util.Date;
