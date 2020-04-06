@@ -29,22 +29,22 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     auth.authenticationProvider(authProvider);
   }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/authenticate").permitAll()
-                .antMatchers(HttpMethod.POST, "/submissions").permitAll()
-                .antMatchers(HttpMethod.GET, "/questions").permitAll()
-                .antMatchers((HttpMethod.POST), "/messages").permitAll()
-                .antMatchers("/application-status").permitAll()
-                .antMatchers("/application-status/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/agreements/gdpr").permitAll()
-                .anyRequest().authenticated()
-                .and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-    }
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.cors().and().csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/authenticate").permitAll()
+            .antMatchers(HttpMethod.POST, "/submissions").permitAll()
+            .antMatchers(HttpMethod.GET, "/questions").permitAll()
+            .antMatchers((HttpMethod.POST), "/messages").permitAll()
+            .antMatchers("/application-status").permitAll()
+            .antMatchers("/application-status/**").permitAll()
+            .antMatchers(HttpMethod.POST, "/agreements/gdpr").permitAll()
+            .anyRequest().authenticated()
+            .and().sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+  }
 
   @Override
   @Bean
