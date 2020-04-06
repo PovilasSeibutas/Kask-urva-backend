@@ -7,8 +7,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,25 +55,18 @@ public class EmailServiceImp implements EmailService {
     public void sendEmailsToQualifiedApplicants() {
         String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         Pattern pattern = Pattern.compile(regex);
-        List<SurveyId> surveyIdList = applicationStatusRepository.getSubmissionIdOfAcceptedUsers();
-        String[] emailArray = new String[surveyIdList.size()];
-        int i = surveyIdList.size();
-        for (SurveyId surveyId : surveyIdList) {
-            i--;
-            int id = surveyId.getId();
-            List<Email> emailList = applicationStatusRepository.getEmailFromFromUser(id);
-            for (Email email: emailList) {
-                String answer = email.getAnswer();
-                Matcher matcher = pattern.matcher(answer);
+        Map<Integer, String> submissionMap = new HashMap<>();
+        for (Integer i : applicationStatusRepository.getSubmissionIdOfAcceptedUsers()) {
+            for (String s : applicationStatusRepository.getEmailFromUser(i)) {
+                Matcher matcher = pattern.matcher(s);
                 if (matcher.matches()) {
-                    emailArray[i] = answer;
+                    submissionMap.put(i, s);
                 }
             }
         }
-        sendEmail(emailArray, successSubject, successText);
-        for (SurveyId surveyId : surveyIdList) {
-            int id = surveyId.getId();
-            applicationStatusRepository.saveSentStatus(id);
+        sendEmail(submissionMap.values().toArray(new String[0]), successSubject, successText);
+        for (Integer surveyId : submissionMap.keySet()) {
+            applicationStatusRepository.saveSentStatus(surveyId);
         }
     }
 }
