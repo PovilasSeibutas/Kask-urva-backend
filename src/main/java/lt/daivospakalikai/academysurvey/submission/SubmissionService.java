@@ -20,4 +20,6 @@ public interface SubmissionService {
   List<Submission> filterAndSortSubmissions(SubmissionFilter submissionFilter);
 
   void deleteSubmission(List<Integer> submissionList);
+
+  void deleteSubmissionByDate(List<Long> timeStampList);
 }
