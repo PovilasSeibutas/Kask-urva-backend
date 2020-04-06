@@ -19,7 +19,7 @@ public class AdminCommentController {
   AdminCommentService adminCommentService;
 
   @PostMapping("/submission-comments")
-  public List<AdminComment> getSubmmisionComments(@RequestBody AdminComment adminComment) {
+  public List<AdminCommentResponse> getSubmmisionComments(@RequestBody AdminComment adminComment) {
     return adminCommentService.getComments(adminComment);
   }
 

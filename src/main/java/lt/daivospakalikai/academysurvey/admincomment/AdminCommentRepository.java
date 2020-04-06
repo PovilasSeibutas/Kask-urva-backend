@@ -26,15 +26,14 @@ public class AdminCommentRepository {
         .withTableName("comment");
   }
 
-  public List<AdminComment> getSumbissionComments(final AdminComment adminComment) {
-    String query = "SELECT * FROM comment WHERE survey_id = ? AND admin_id = ?";
+  public List<AdminCommentResponse> getSumbissionComments(final AdminComment adminComment) {
+    String query = "SELECT c.*, a.name, a.surname FROM comment c INNER JOIN admin a ON a.id = c.admin_id WHERE c.survey_id = ?";
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
         ps.setInt(1, Integer.valueOf(adminComment.getSubmissionId()));
-        ps.setInt(2, Integer.valueOf(adminComment.getAdminId()));
       }
-    }, new AdminCommentRowMapper());
+    }, new AdminCommentResponseMapper());
   }
 
   public void createComment(final AdminComment adminComment) {

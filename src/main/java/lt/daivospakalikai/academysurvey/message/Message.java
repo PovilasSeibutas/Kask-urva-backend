@@ -7,11 +7,18 @@ public class Message {
   private String message;
   private Integer status;
 
+  public Message() {}
+  
   public Message(Integer id, String email, String message, Integer status) {
     this.id = id;
     this.email = email;
     this.message = message;
     this.status = status;
+  }
+
+  public Message(String email, String message) {
+    this.email = email;
+    this.message = message;
   }
 
   public Integer getId() {
@@ -29,4 +36,5 @@ public class Message {
   public Integer getStatus() {
     return status;
   }
+
 }
