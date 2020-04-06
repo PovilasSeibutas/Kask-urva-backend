@@ -15,11 +15,13 @@ import java.util.regex.Pattern;
 
 @Service
 public class EmailServiceImp implements EmailService {
+
     private JavaMailSender javaMailSender;
     private final String notificationSubject = "IT Akademija: Nauja aplikacija!";
     private final String notificationText = "Užregistruota nauja aplikacija į IT Akademiją. Ją galite peržiūrėti adresu:";
     private final String successSubject = "IT Akademija: Atranka sėkminga!";
     private final String successText = "Sveikiname, jūs sėkmingai praėjote atranką į IT Akademiją. Artimiausiu metu su Jumis susisieks mūsų personalo darbuotojas. Geros dienos!";
+
     @Autowired
     public EmailServiceImp(JavaMailSender javaMailSender) throws MailException {
         this.javaMailSender = javaMailSender;
@@ -37,6 +39,7 @@ public class EmailServiceImp implements EmailService {
 
         javaMailSender.send(mail);
     }
+
     public String sendNotificationEmailToAdmin() {
         Admin admin = new Admin();
         try {
