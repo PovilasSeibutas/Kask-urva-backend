@@ -1,5 +1,6 @@
 package lt.daivospakalikai.academysurvey.submission;
 
+import io.swagger.models.auth.In;
 import java.lang.reflect.Array;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -155,45 +156,18 @@ public class SubmissionRepository {
   }
 
   public List<SubmissionForm> filterAndSortSubmissions(SubmissionFilter submissionFilter) {
-    Map<String, String> filtersMap = new LinkedHashMap<>();
-    Map<String, List<String>> typeMap = new LinkedHashMap<>();
-    List<String> typeList = new ArrayList<>();
     String havingId = "";
     String orderBy = " order by s.id desc ";
-    for (String fs : submissionFilter.getFilterList()) {
-      String key = Array.get(fs.split("="), 0).toString();
-      String value = Array.get(fs.split("="), 1).toString();
-      List<String> newTypeList = new ArrayList(Arrays.asList(value));
-      typeList.add(key);
-      if (filtersMap.containsKey(key)) {
-        filtersMap.replace(key,
-            sortFilterMap.get(key) + " in (" + Array.get(filtersMap.get(key).split("="), 1).toString() + ", ? )");
-        newTypeList.addAll(typeMap.get(key));
-        typeMap.replace(key, newTypeList);
-      } else {
-        filtersMap.put(key, sortFilterMap.get(key) + "= ?");
-        typeMap.put(key, newTypeList);
-      }
-    }
-    for (Map.Entry<String, String> f : filtersMap.entrySet()) {
-      havingId = new StringBuilder().append(havingId).append(" AND " + f.getValue()).toString();
-    }
     if (!generateOrderByString(submissionFilter.getSortList(), orderBy).equals(" order by ")) {
       orderBy = generateOrderByString(submissionFilter.getSortList(), orderBy);
     }
-
     if (submissionFilter.getAnswerForm().getFormat().equals("=")) {
       havingId = new StringBuilder().append(havingId).append(
-          " AND q.id = " + submissionFilter.getAnswerForm().getQuestionId() +
-              " AND a.answer = '" + submissionFilter.getAnswerForm().getAnswer() + "'").toString();
-    } else if(submissionFilter.getAnswerForm().getFormat().equals("?")){
+          " AND q.id = ? AND a.answer = ? ").toString();
+    } else if (submissionFilter.getAnswerForm().getFormat().equals("?")) {
       havingId = new StringBuilder().append(havingId).append(
-          " AND q.id = " + submissionFilter.getAnswerForm().getQuestionId() +
-              " AND a.answer LIKE '%" + submissionFilter.getAnswerForm().getAnswer() + "%'").toString();
+          " AND q.id = ? AND a.answer LIKE ?").toString();
     }
-
-    System.out.println(havingId);
-
     String query =
         "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer,\n"
             + "s.gdpr_id as gid, q.option\n"
@@ -203,33 +177,20 @@ public class SubmissionRepository {
             + "FROM survey s, answer a, question q\n"
             + "WHERE s.id = a.survey_id AND q.id = a.question_id" + havingId + ")"
             + orderBy;
-
     System.out.println(query);
-    return getFilteredSubmissions(query, typeList, getFilteredValues(typeMap));
+    return getFilteredSubmissions(query, submissionFilter.getAnswerForm().getQuestionId(),
+        submissionFilter.getAnswerForm().getAnswer());
   }
 
-  private List<SubmissionForm> getFilteredSubmissions(String query, List<String> typeType, List<String> typeValues) {
+  private List<SubmissionForm> getFilteredSubmissions(String query, Integer questionId, String answer) {
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
-        for (int i = 0; i < typeType.size(); i++) {
-          if (typeType.get(i).equals("number")) {
-            ps.setInt(i + 1, Integer.valueOf(typeValues.get(i)));
-          } else {
-            ps.setString(i + 1, typeValues.get(i));
-          }
-        }
+        ps.setInt(1, questionId);
+        ps.setString(2, "%" + answer +"%");
         System.out.println(ps.toString());
       }
     }, new SubmissionFormRowMapper());
-  }
-
-  private List<String> getFilteredValues(Map<String, List<String>> typeMap) {
-    List<String> typeValues = new ArrayList<>();
-    for (Map.Entry<String, List<String>> tp : typeMap.entrySet()) {
-      typeValues.addAll(tp.getValue());
-    }
-    return typeValues;
   }
 
   private String generateOrderByString(List<String> sortList, String query) {
