@@ -1,16 +1,14 @@
 package lt.daivospakalikai.academysurvey.submission;
 
-import io.swagger.models.auth.In;
 import java.lang.reflect.Array;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
+import lt.daivospakalikai.academysurvey.filterandsort.AnswerForm;
 import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -79,40 +77,6 @@ public class SubmissionRepository {
     });
   }
 
-  public List<SubmissionForm> sortSubmissionsByNameAZ() {
-    String query =
-        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as "
-            + "gid, q.option\n"
-            + "FROM survey s, answer a, question q\n"
-            + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid\n"
-            + "from answer a1\n"
-            + "join answer a2\n"
-            + "where a1.survey_id = a2.survey_id \n"
-            + "\tand a1.question_id = 1\n"
-            + "    and a2.question_id = 2  \n"
-            + "    and a1.question_id <> a2.question_id) c \n"
-            + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = sid\n"
-            + "order by combined";
-    return jdbcTemplate.query(query, new SubmissionFormRowMapper());
-  }
-
-  public List<SubmissionForm> sortSubmissionsByNameZA() {
-    String query =
-        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as "
-            + "gid, q.option\n"
-            + "FROM survey s, answer a, question q\n"
-            + "JOIN (select concat(a1.answer, a2.answer) as combined, a1.survey_id as sid\n"
-            + "from answer a1\n"
-            + "join answer a2\n"
-            + "where a1.survey_id = a2.survey_id \n"
-            + "\tand a1.question_id = 1\n"
-            + "    and a2.question_id = 2  \n"
-            + "    and a1.question_id <> a2.question_id) c \n"
-            + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = sid\n"
-            + "order by combined desc";
-    return jdbcTemplate.query(query, new SubmissionFormRowMapper());
-  }
-
   public List<SubmissionForm> getSubmissionById(Integer id) {
     String query =
         "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
@@ -139,7 +103,6 @@ public class SubmissionRepository {
         return submissionIdList.size();
       }
     });
-
   }
 
   public void deleteSubmissionsByDate(List<Long> timeStampList) {
@@ -178,16 +141,19 @@ public class SubmissionRepository {
             + "WHERE s.id = a.survey_id AND q.id = a.question_id" + havingId + ")"
             + orderBy;
     System.out.println(query);
-    return getFilteredSubmissions(query, submissionFilter.getAnswerForm().getQuestionId(),
-        submissionFilter.getAnswerForm().getAnswer());
+    return getFilteredSubmissions(query, submissionFilter.getAnswerForm());
   }
 
-  private List<SubmissionForm> getFilteredSubmissions(String query, Integer questionId, String answer) {
+  private List<SubmissionForm> getFilteredSubmissions(String query, AnswerForm answerForm) {
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
-        ps.setInt(1, questionId);
-        ps.setString(2, "%" + answer +"%");
+        ps.setInt(1, answerForm.getQuestionId());
+        if (answerForm.getFormat().equals("?")) {
+          ps.setString(2, "%" + answerForm.getAnswer() + "%");
+        } else {
+          ps.setString(2, answerForm.getAnswer());
+        }
         System.out.println(ps.toString());
       }
     }, new SubmissionFormRowMapper());

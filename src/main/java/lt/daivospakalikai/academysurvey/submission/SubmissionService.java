@@ -11,10 +11,6 @@ public interface SubmissionService {
 
   void updateSubmissionStatus(SubmissionStatus submissionStatus);
 
-  List<Submission> sortSubmissionsByNameAZ();
-
-  List<Submission> sortSubmissionsByNameZA();
-
   Submission getSubmissionById(Integer id);
 
   List<Submission> filterAndSortSubmissions(SubmissionFilter submissionFilter);

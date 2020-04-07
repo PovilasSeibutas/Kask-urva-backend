@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import lt.daivospakalikai.academysurvey.emailsend.EmailService;
 import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import lt.daivospakalikai.academysurvey.survey.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ public class SubmissionServiceImp implements SubmissionService {
 
   @Autowired
   SubmissionRepository submissionRepository;
-//  @Autowired
+  //  @Autowired
 //  EmailService emailService;
   @Autowired
   SurveyService surveyService;
@@ -37,18 +36,6 @@ public class SubmissionServiceImp implements SubmissionService {
   @Override
   public void updateSubmissionStatus(SubmissionStatus submissionStatus) {
     submissionRepository.updateSubmissionStatus(submissionStatus);
-  }
-
-  @Override
-  public List<Submission> sortSubmissionsByNameAZ() {
-    Map<Integer, Submission> submissionMap = new LinkedHashMap<>();
-    return getDataFromDB(submissionMap, submissionRepository.sortSubmissionsByNameAZ());
-  }
-
-  @Override
-  public List<Submission> sortSubmissionsByNameZA() {
-    Map<Integer, Submission> submissionMap = new LinkedHashMap<>();
-    return getDataFromDB(submissionMap, submissionRepository.sortSubmissionsByNameZA());
   }
 
   @Override

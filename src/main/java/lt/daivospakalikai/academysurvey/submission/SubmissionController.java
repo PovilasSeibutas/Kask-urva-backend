@@ -1,8 +1,6 @@
 package lt.daivospakalikai.academysurvey.submission;
 
 import java.util.List;
-//import lt.daivospakalikai.academysurvey.Captcha.CaptchaResponse;
-//import lt.daivospakalikai.academysurvey.Captcha.CaptchaValidator;
 import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +16,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+//import lt.daivospakalikai.academysurvey.Captcha.CaptchaResponse;
+//import lt.daivospakalikai.academysurvey.Captcha.CaptchaValidator;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -60,18 +61,6 @@ public class SubmissionController {
   @DeleteMapping("/deleteByDate")
   public void deleteSubmissionsByDate(@RequestBody List<Long> timeStampList) {
     submissionService.deleteSubmissionByDate(timeStampList);
-  }
-
-  @GetMapping("/sorted-submissions-az")
-  public ResponseEntity<List<Submission>> getSortSubmissionsByNameAZ() {
-    List<Submission> submissionList = submissionService.sortSubmissionsByNameAZ();
-    return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
-  }
-
-  @GetMapping("/sorted-submissions-za")
-  public ResponseEntity<List<Submission>> getSortSubmissionsByNameZA() {
-    List<Submission> submissionList = submissionService.sortSubmissionsByNameZA();
-    return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
   }
 
   //for testing purposes
