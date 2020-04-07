@@ -27,7 +27,8 @@ public class AdminCommentRepository {
   }
 
   public List<AdminCommentResponse> getSumbissionComments(final AdminComment adminComment) {
-    String query = "SELECT c.*, a.name, a.surname FROM comment c INNER JOIN admin a ON a.id = c.admin_id WHERE c.survey_id = ?";
+    String query = "SELECT c.*, a.name, a.surname FROM comment c INNER JOIN admin a ON a.id = c.admin_id WHERE c"
+        + ".survey_id = ? order by c.id desc";
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {

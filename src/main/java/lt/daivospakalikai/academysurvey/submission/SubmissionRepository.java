@@ -43,7 +43,8 @@ public class SubmissionRepository {
     String query = "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, "
         + "s.gdpr_id as gid, q.option\n"
         + "FROM survey s, answer a, question q\n"
-        + "WHERE s.id = a.survey_id AND q.id = a.question_id";
+        + "WHERE s.id = a.survey_id AND q.id = a.question_id"
+        + " order by s.id desc";
     return jdbcTemplate.query(query, new SubmissionFormRowMapper());
   }
 
@@ -120,16 +121,20 @@ public class SubmissionRepository {
 
   public List<SubmissionForm> filterAndSortSubmissions(SubmissionFilter submissionFilter) {
     String havingId = "";
-    String orderBy = " order by s.id desc ";
+    String orderBy = " order by s.id desc, a.id asc ";
     if (!generateOrderByString(submissionFilter.getSortList(), orderBy).equals(" order by ")) {
       orderBy = generateOrderByString(submissionFilter.getSortList(), orderBy);
     }
-    if (submissionFilter.getAnswerForm().getFormat().equals("=")) {
-      havingId = new StringBuilder().append(havingId).append(
-          " AND q.id = ? AND a.answer = ? ").toString();
-    } else if (submissionFilter.getAnswerForm().getFormat().equals("?")) {
-      havingId = new StringBuilder().append(havingId).append(
-          " AND q.id = ? AND a.answer LIKE ?").toString();
+    if (submissionFilter.getAnswerForm().getFormat() != null
+        && submissionFilter.getAnswerForm().getAnswer() != null
+        && submissionFilter.getAnswerForm().getQuestionId() != null) {
+      if (submissionFilter.getAnswerForm().getFormat().equals("=")) {
+        havingId = new StringBuilder().append(havingId).append(
+            " AND q.id = ? AND a.answer = ? ").toString();
+      } else if (submissionFilter.getAnswerForm().getFormat().equals("?")) {
+        havingId = new StringBuilder().append(havingId).append(
+            " AND q.id = ? AND a.answer LIKE ?").toString();
+      }
     }
     String query =
         "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer,\n"
@@ -145,18 +150,24 @@ public class SubmissionRepository {
   }
 
   private List<SubmissionForm> getFilteredSubmissions(String query, AnswerForm answerForm) {
-    return jdbcTemplate.query(query, new PreparedStatementSetter() {
-      @Override
-      public void setValues(PreparedStatement ps) throws SQLException {
-        ps.setInt(1, answerForm.getQuestionId());
-        if (answerForm.getFormat().equals("?")) {
-          ps.setString(2, "%" + answerForm.getAnswer() + "%");
-        } else {
-          ps.setString(2, answerForm.getAnswer());
+    if (answerForm.getFormat() != null
+        && answerForm.getAnswer() != null
+        && answerForm.getQuestionId() != null) {
+      return jdbcTemplate.query(query, new PreparedStatementSetter() {
+        @Override
+        public void setValues(PreparedStatement ps) throws SQLException {
+          ps.setInt(1, answerForm.getQuestionId());
+          if (answerForm.getFormat().equals("?")) {
+            ps.setString(2, "%" + answerForm.getAnswer() + "%");
+          } else {
+            ps.setString(2, answerForm.getAnswer());
+          }
+          System.out.println(ps.toString());
         }
-        System.out.println(ps.toString());
-      }
-    }, new SubmissionFormRowMapper());
+      }, new SubmissionFormRowMapper());
+    } else {
+      return jdbcTemplate.query(query, new SubmissionFormRowMapper());
+    }
   }
 
   private String generateOrderByString(List<String> sortList, String query) {
@@ -172,7 +183,7 @@ public class SubmissionRepository {
     }
     for (int i = 0; i < sortByList.size(); i++) {
       if (i == sortByList.size() - 1) {
-        query = new StringBuilder().append(query).append(sortByList.get(i)).toString();
+        query = new StringBuilder().append(query).append(sortByList.get(i)).toString() + ", a.id";
       } else {
         query = new StringBuilder().append(query).append(sortByList.get(i) + ", ").toString();
       }

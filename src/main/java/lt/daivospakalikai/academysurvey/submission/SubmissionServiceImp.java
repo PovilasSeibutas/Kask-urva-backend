@@ -24,7 +24,7 @@ public class SubmissionServiceImp implements SubmissionService {
 
   @Override
   public List<Submission> getAllSubmissions() {
-    Map<Integer, Submission> submissionMap = new TreeMap<>();
+    Map<Integer, Submission> submissionMap = new LinkedHashMap<>();
     return getDataFromDB(submissionMap, submissionRepository.getAll());
   }
 
