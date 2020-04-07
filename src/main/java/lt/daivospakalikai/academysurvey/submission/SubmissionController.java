@@ -58,8 +58,8 @@ public class SubmissionController {
   }
 
   @DeleteMapping("/deleteByDate")
-  public void deleteSubmissionsByDate(@RequestBody List<Long> timeStampList) {
-    submissionService.deleteSubmissionByDate(timeStampList);
+  public Integer deleteSubmissionsByDate(@RequestBody List<Long> timeStampList) {
+    return submissionService.deleteSubmissionByDate(timeStampList);
   }
 
   //for testing purposes

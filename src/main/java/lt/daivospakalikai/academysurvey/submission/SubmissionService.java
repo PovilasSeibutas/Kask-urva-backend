@@ -17,5 +17,5 @@ public interface SubmissionService {
 
   void deleteSubmission(List<Integer> submissionList);
 
-  void deleteSubmissionByDate(List<Long> timeStampList);
+  Integer deleteSubmissionByDate(List<Long> timeStampList);
 }

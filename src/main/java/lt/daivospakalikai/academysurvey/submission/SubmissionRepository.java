@@ -106,17 +106,20 @@ public class SubmissionRepository {
     });
   }
 
-  public void deleteSubmissionsByDate(List<Long> timeStampList) {
+  public Integer deleteSubmissionsByDate(List<Long> timeStampList) {
     if (timeStampList.size() == 2) {
       String query = "DELETE FROM survey WHERE (time_stamp >= ? AND time_stamp <= ? AND id<>0)";
-      jdbcTemplate.update(query, new PreparedStatementSetter() {
+      return jdbcTemplate.update(query, new PreparedStatementSetter() {
         @Override
         public void setValues(PreparedStatement ps) throws SQLException {
           ps.setLong(1, timeStampList.get(0));
           ps.setLong(2, timeStampList.get(1));
         }
       });
+    } else {
+      return null;
     }
+
   }
 
   public List<SubmissionForm> filterAndSortSubmissions(SubmissionFilter submissionFilter) {
@@ -145,7 +148,6 @@ public class SubmissionRepository {
             + "FROM survey s, answer a, question q\n"
             + "WHERE s.id = a.survey_id AND q.id = a.question_id" + havingId + ")"
             + orderBy;
-    System.out.println(query);
     return getFilteredSubmissions(query, submissionFilter.getAnswerForm());
   }
 

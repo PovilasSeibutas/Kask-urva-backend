@@ -57,8 +57,8 @@ public class SubmissionServiceImp implements SubmissionService {
   }
 
   @Override
-  public void deleteSubmissionByDate(List<Long> timeStampList) {
-    submissionRepository.deleteSubmissionsByDate(timeStampList);
+  public Integer deleteSubmissionByDate(List<Long> timeStampList) {
+    return submissionRepository.deleteSubmissionsByDate(timeStampList);
   }
 
   private ArrayList<Submission> getDataFromDB(Map<Integer, Submission> map,
