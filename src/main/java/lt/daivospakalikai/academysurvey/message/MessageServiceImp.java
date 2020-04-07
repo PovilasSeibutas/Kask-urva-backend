@@ -2,7 +2,7 @@ package lt.daivospakalikai.academysurvey.message;
 
 import java.util.List;
 
-import lt.daivospakalikai.academysurvey.emailsend.EmailService;
+//import lt.daivospakalikai.academysurvey.emailsend.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +13,8 @@ public class MessageServiceImp implements MessageService {
   @Autowired
   MessageRepository messageRepository;
 
-  @Autowired
-  EmailService emailService;
+//  @Autowired
+//  EmailService emailService;
 
   @Override
   public List<Message> getAllMessages() {
@@ -37,7 +37,7 @@ public class MessageServiceImp implements MessageService {
     messageRepository.replay(messageOutbox);
       String[] email = {messageRepository.getUsersEmail(messageOutbox.getMessageId())};
       String message = messageRepository.getMessageText(messageOutbox.getMessageId());
-      emailService.sendEmail(email, subject, message);
+//      emailService.sendEmail(email, subject, message);
     } catch (Exception e) {
       throw new Exception("Something went wrong.");
     }

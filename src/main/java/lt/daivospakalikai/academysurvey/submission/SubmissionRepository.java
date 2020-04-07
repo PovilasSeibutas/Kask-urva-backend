@@ -36,7 +36,7 @@ public class SubmissionRepository {
     sortFilterMap.put("status", "s.status");
     sortFilterMap.put("gdprId", "s.gdpr_id");
     sortFilterMap.put("option", "q.option");
-    sortFilterMap.put("timeStamp", "s.time_stamp,");
+    sortFilterMap.put("timeStamp", "s.time_stamp");
 
   }
 
@@ -158,19 +158,16 @@ public class SubmissionRepository {
     Map<String, String> filtersMap = new LinkedHashMap<>();
     Map<String, List<String>> typeMap = new LinkedHashMap<>();
     List<String> typeList = new ArrayList<>();
-    String query =
-        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as "
-            + "gid, q.option\n"
-            + "FROM survey s, answer a, question q\n"
-            + "WHERE s.id = a.survey_id AND q.id = a.question_id\n"
-            + "having 1";
+    String havingId = "";
+    String orderBy = " order by s.id desc ";
     for (String fs : submissionFilter.getFilterList()) {
       String key = Array.get(fs.split("="), 0).toString();
       String value = Array.get(fs.split("="), 1).toString();
       List<String> newTypeList = new ArrayList(Arrays.asList(value));
       typeList.add(key);
       if (filtersMap.containsKey(key)) {
-        filtersMap.replace(key, sortFilterMap.get(key) + " in (" + filtersMap.get(key) + ", ? )");
+        filtersMap.replace(key,
+            sortFilterMap.get(key) + " in (" + Array.get(filtersMap.get(key).split("="), 1).toString() + ", ? )");
         newTypeList.addAll(typeMap.get(key));
         typeMap.replace(key, newTypeList);
       } else {
@@ -179,13 +176,20 @@ public class SubmissionRepository {
       }
     }
     for (Map.Entry<String, String> f : filtersMap.entrySet()) {
-      query = new StringBuilder().append(query).append(" AND " + f.getValue()).toString();
+      havingId = new StringBuilder().append(havingId).append(" AND " + f.getValue()).toString();
     }
-
-    if (!generateOrderByString(submissionFilter.getSortList()).equals(" order by ")) {
-      query = new StringBuilder().append(query)
-          .append(generateOrderByString(submissionFilter.getSortList())).toString();
+    if (!generateOrderByString(submissionFilter.getSortList(), orderBy).equals(" order by ")) {
+      orderBy = generateOrderByString(submissionFilter.getSortList(), orderBy);
     }
+    String query =
+        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer,\n"
+            + "s.gdpr_id as gid, q.option\n"
+            + "FROM survey s, answer a, question q\n"
+            + "WHERE s.id = a.survey_id AND q.id = a.question_id\n"
+            + "AND s.id in (SELECT s.id\n"
+            + "FROM survey s, answer a, question q\n"
+            + "WHERE s.id = a.survey_id AND q.id = a.question_id" + havingId + ")"
+            + orderBy;
 
     return getFilteredSubmissions(query, typeList, getFilteredValues(typeMap));
   }
@@ -213,8 +217,10 @@ public class SubmissionRepository {
     return typeValues;
   }
 
-  private String generateOrderByString(List<String> sortList) {
-    String query = " order by ";
+  private String generateOrderByString(List<String> sortList, String query) {
+    if (!sortList.isEmpty()) {
+      query = " order by ";
+    }
     List<String> sortByList = new ArrayList<>();
     for (String s : sortList) {
       String key = Array.get(s.split("="), 0).toString();

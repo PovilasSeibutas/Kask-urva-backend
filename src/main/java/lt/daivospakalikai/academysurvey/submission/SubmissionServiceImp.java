@@ -17,8 +17,8 @@ public class SubmissionServiceImp implements SubmissionService {
 
   @Autowired
   SubmissionRepository submissionRepository;
-  @Autowired
-  EmailService emailService;
+//  @Autowired
+//  EmailService emailService;
   @Autowired
   SurveyService surveyService;
 
@@ -31,7 +31,7 @@ public class SubmissionServiceImp implements SubmissionService {
   @Override
   public void saveSubmissions(Submission submission) {
     submissionRepository.saveSubmissions(submission.getAnswers(), surveyService.createSurvey(submission.getGdprId()));
-    emailService.sendNotificationEmailToAdmin();
+//    emailService.sendNotificationEmailToAdmin();
   }
 
   @Override

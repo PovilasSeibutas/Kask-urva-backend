@@ -1,6 +1,6 @@
 package lt.daivospakalikai.academysurvey.emailsend;
 
-import lt.daivospakalikai.academysurvey.applicationstatus.ApplicationStatusRepository;
+//import lt.daivospakalikai.academysurvey.applicationstatus.ApplicationStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 
 @Service
-public class EmailServiceImp implements EmailService {
+public class EmailServiceImp {
 
     private JavaMailSender javaMailSender;
     private final String notificationSubject = "IT Akademija: Nauja aplikacija!";
@@ -27,8 +27,8 @@ public class EmailServiceImp implements EmailService {
         this.javaMailSender = javaMailSender;
     }
 
-    @Autowired
-    private ApplicationStatusRepository applicationStatusRepository;
+//    @Autowired
+//    private ApplicationStatusRepository applicationStatusRepository;
 
     public void sendEmail(String[] emailAddress, String notificationSubject, String notificationText) {
         SimpleMailMessage mail = new SimpleMailMessage();
@@ -51,29 +51,29 @@ public class EmailServiceImp implements EmailService {
         return "Thank you for filling up the application form!";
     }
 
-    @Override
-    public void sendEmailsToQualifiedApplicants() {
-        String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-        Pattern pattern = Pattern.compile(regex);
-        List<SurveyId> surveyIdList = applicationStatusRepository.getSubmissionIdOfAcceptedUsers();
-        String[] emailArray = new String[surveyIdList.size()];
-        int i = surveyIdList.size();
-        for (SurveyId surveyId : surveyIdList) {
-            i--;
-            int id = surveyId.getId();
-            List<Email> emailList = applicationStatusRepository.getEmailFromFromUser(id);
-            for (Email email: emailList) {
-                String answer = email.getAnswer();
-                Matcher matcher = pattern.matcher(answer);
-                if (matcher.matches()) {
-                    emailArray[i] = answer;
-                }
-            }
-        }
-        sendEmail(emailArray, successSubject, successText);
-        for (SurveyId surveyId : surveyIdList) {
-            int id = surveyId.getId();
-            applicationStatusRepository.saveSentStatus(id);
-        }
-    }
+//    @Override
+//    public void sendEmailsToQualifiedApplicants() {
+//        String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+//        Pattern pattern = Pattern.compile(regex);
+//        List<SurveyId> surveyIdList = applicationStatusRepository.getSubmissionIdOfAcceptedUsers();
+//        String[] emailArray = new String[surveyIdList.size()];
+//        int i = surveyIdList.size();
+//        for (SurveyId surveyId : surveyIdList) {
+//            i--;
+//            int id = surveyId.getId();
+//            List<Email> emailList = applicationStatusRepository.getEmailFromFromUser(id);
+//            for (Email email: emailList) {
+//                String answer = email.getAnswer();
+//                Matcher matcher = pattern.matcher(answer);
+//                if (matcher.matches()) {
+//                    emailArray[i] = answer;
+//                }
+//            }
+//        }
+//        sendEmail(emailArray, successSubject, successText);
+//        for (SurveyId surveyId : surveyIdList) {
+//            int id = surveyId.getId();
+//            applicationStatusRepository.saveSentStatus(id);
+//        }
+//    }
 }

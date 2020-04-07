@@ -1,8 +1,8 @@
 package lt.daivospakalikai.academysurvey.submission;
 
 import java.util.List;
-import lt.daivospakalikai.academysurvey.Captcha.CaptchaResponse;
-import lt.daivospakalikai.academysurvey.Captcha.CaptchaValidator;
+//import lt.daivospakalikai.academysurvey.Captcha.CaptchaResponse;
+//import lt.daivospakalikai.academysurvey.Captcha.CaptchaValidator;
 import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +29,8 @@ public class SubmissionController {
   @Autowired
   SubmissionService submissionService;
 
-  @Autowired
-  CaptchaValidator captchaValidator;
+//  @Autowired
+//  CaptchaValidator captchaValidator;
 
   @GetMapping
   public ResponseEntity<List<Submission>> getAllSubmissions() {
@@ -40,10 +40,10 @@ public class SubmissionController {
 
   @PostMapping
   public void saveSubmissions(@RequestBody Submission submission) throws Exception {
-    CaptchaResponse captchaResponse = captchaValidator.validateCaptcha(submission.getRecaptchaToken());
-    if (!captchaResponse.getSuccess()) {
-      throw new Exception("Captcha is not valid");
-    }
+//    CaptchaResponse captchaResponse = captchaValidator.validateCaptcha(submission.getRecaptchaToken());
+//    if (!captchaResponse.getSuccess()) {
+//      throw new Exception("Captcha is not valid");
+//    }
     submissionService.saveSubmissions(submission);
   }
 
