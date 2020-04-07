@@ -181,6 +181,19 @@ public class SubmissionRepository {
     if (!generateOrderByString(submissionFilter.getSortList(), orderBy).equals(" order by ")) {
       orderBy = generateOrderByString(submissionFilter.getSortList(), orderBy);
     }
+
+    if (submissionFilter.getAnswerForm().getFormat().equals("=")) {
+      havingId = new StringBuilder().append(havingId).append(
+          " AND q.id = " + submissionFilter.getAnswerForm().getQuestionId() +
+              " AND a.answer = '" + submissionFilter.getAnswerForm().getAnswer() + "'").toString();
+    } else if(submissionFilter.getAnswerForm().getFormat().equals("?")){
+      havingId = new StringBuilder().append(havingId).append(
+          " AND q.id = " + submissionFilter.getAnswerForm().getQuestionId() +
+              " AND a.answer LIKE '%" + submissionFilter.getAnswerForm().getAnswer() + "%'").toString();
+    }
+
+    System.out.println(havingId);
+
     String query =
         "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer,\n"
             + "s.gdpr_id as gid, q.option\n"
@@ -191,6 +204,7 @@ public class SubmissionRepository {
             + "WHERE s.id = a.survey_id AND q.id = a.question_id" + havingId + ")"
             + orderBy;
 
+    System.out.println(query);
     return getFilteredSubmissions(query, typeList, getFilteredValues(typeMap));
   }
 
@@ -205,6 +219,7 @@ public class SubmissionRepository {
             ps.setString(i + 1, typeValues.get(i));
           }
         }
+        System.out.println(ps.toString());
       }
     }, new SubmissionFormRowMapper());
   }
