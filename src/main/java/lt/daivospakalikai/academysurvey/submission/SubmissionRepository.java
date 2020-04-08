@@ -42,11 +42,17 @@ public class SubmissionRepository {
   }
 
   public List<SubmissionForm> getAll() {
-    String query = "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, "
-        + "s.gdpr_id as gid, q.option\n"
-        + "FROM survey s, answer a, question q\n"
-        + "WHERE s.id = a.survey_id AND q.id = a.question_id"
-        + " order by s.id desc, q.id asc";
+    String query =
+        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.ord as option_id, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
+            + "FROM survey s, answer a, \n"
+            + "(SELECT *\n"
+            + "FROM question q1\n"
+            + "INNER JOIN \n"
+            + "(SELECT id as id2, CAST(JSON_VALUE(REPLACE(`option`, '''', '\"'), '$.order') AS UNSIGNED) as ord FROM question\n"
+            + "order by ord asc) q2\n"
+            + " ON q1.id = q2.id2) q\n"
+            + "WHERE s.id = a.survey_id AND q.id = a.question_id\n"
+            + "order by s.id desc, option_id asc";
     return jdbcTemplate.query(query, new SubmissionFormRowMapper());
   }
 
@@ -83,8 +89,15 @@ public class SubmissionRepository {
   public List<SubmissionForm> getSubmissionById(Integer id) {
     String query =
         "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
-            + "FROM survey s, answer a, question q\n"
-            + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = ? ";
+            + "FROM survey s, answer a\n"
+            + "(SELECT *\n"
+            + "FROM question q1\n"
+            + "INNER JOIN \n"
+            + "(SELECT id as id2, CAST(JSON_VALUE(REPLACE(`option`, '''', '\"'), '$.order') AS UNSIGNED) as ord FROM question\n"
+            + "order by ord asc) q2\n"
+            + " ON q1.id = q2.id2) q\n"
+            + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = ? "
+            + "option_id asc\"";
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
@@ -126,7 +139,7 @@ public class SubmissionRepository {
 
   public List<SubmissionForm> filterAndSortSubmissions(SubmissionFilter submissionFilter) {
     String havingId = "";
-    String orderBy = " order by s.id desc, a.id asc ";
+    String orderBy = " order by s.id desc, option_id asc";
     if (!generateOrderByString(submissionFilter.getSortList(), orderBy).equals(" order by ")) {
       orderBy = generateOrderByString(submissionFilter.getSortList(), orderBy);
     }
@@ -142,9 +155,14 @@ public class SubmissionRepository {
       }
     }
     String query =
-        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer,\n"
-            + "s.gdpr_id as gid, q.option\n"
-            + "FROM survey s, answer a, question q\n"
+        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.ord as option_id, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
+            + "FROM survey s, answer a, \n"
+            + "(SELECT *\n"
+            + "FROM question q1\n"
+            + "INNER JOIN \n"
+            + "(SELECT id as id2, CAST(JSON_VALUE(REPLACE(`option`, '''', '\"'), '$.order') AS UNSIGNED) as ord FROM question\n"
+            + "order by ord asc) q2\n"
+            + " ON q1.id = q2.id2) q\n"
             + "WHERE s.id = a.survey_id AND q.id = a.question_id\n"
             + "AND s.id in (SELECT s.id\n"
             + "FROM survey s, answer a, question q\n"
@@ -186,7 +204,7 @@ public class SubmissionRepository {
     }
     for (int i = 0; i < sortByList.size(); i++) {
       if (i == sortByList.size() - 1) {
-        query = new StringBuilder().append(query).append(sortByList.get(i)).toString() + ", a.id";
+        query = new StringBuilder().append(query).append(sortByList.get(i)).toString() + ", option_id asc";
       } else {
         query = new StringBuilder().append(query).append(sortByList.get(i) + ", ").toString();
       }
