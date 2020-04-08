@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
-import lt.daivospakalikai.academysurvey.exception.CustomExceptionTranslator;
 import lt.daivospakalikai.academysurvey.filterandsort.AnswerForm;
 import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import org.springframework.beans.factory.annotation.Autowired;
