@@ -40,10 +40,10 @@ public class SubmissionController {
 
   @PostMapping
   public void saveSubmissions(@RequestBody Submission submission) throws Exception {
-    CaptchaResponse captchaResponse = captchaValidator.validateCaptcha(submission.getRecaptchaToken());
-    if (!captchaResponse.getSuccess()) {
-      throw new Exception("Captcha is not valid");
-    }
+//    CaptchaResponse captchaResponse = captchaValidator.validateCaptcha(submission.getRecaptchaToken());
+//    if (!captchaResponse.getSuccess()) {
+//      throw new Exception("Captcha is not valid");
+//    }
     submissionService.saveSubmissions(submission);
   }
 

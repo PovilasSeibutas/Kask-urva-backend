@@ -36,14 +36,15 @@ public class SubmissionRepository {
     sortFilterMap.put("gdprId", "s.gdpr_id");
     sortFilterMap.put("option", "q.option");
     sortFilterMap.put("timeStamp", "s.time_stamp");
-//    CustomExceptionTranslator customTranslator = new CustomExceptionTranslator();
-//    jdbcTemplate.setExceptionTranslator(customTranslator);
+    sortFilterMap.put("sent", "s.sent");
 
   }
 
   public List<SubmissionForm> getAll() {
     String query =
-        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.ord as option_id, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
+        "SELECT s.id as sid, s.status, s.time_stamp, s.sent, q.id as qid, q.ord as option_id, q.question, a"
+            + ".id as aid,"
+            + " a.answer, s.gdpr_id as gid, q.option\n"
             + "FROM survey s, answer a, \n"
             + "(SELECT *\n"
             + "FROM question q1\n"
@@ -88,7 +89,7 @@ public class SubmissionRepository {
 
   public List<SubmissionForm> getSubmissionById(Integer id) {
     String query =
-        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
+        "SELECT s.id as sid, s.status, s.time_stamp, s.sent, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
             + "FROM survey s, answer a\n"
             + "(SELECT *\n"
             + "FROM question q1\n"
@@ -155,7 +156,7 @@ public class SubmissionRepository {
       }
     }
     String query =
-        "SELECT s.id as sid, s.status, s.time_stamp, q.id as qid, q.ord as option_id, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
+        "SELECT s.id as sid, s.status, s.time_stamp, s.sent, q.id as qid, q.ord as option_id, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
             + "FROM survey s, answer a, \n"
             + "(SELECT *\n"
             + "FROM question q1\n"

@@ -13,12 +13,13 @@ public class SubmissionForm {
   private Integer gdprId;
   private String option;
   private Long timeStamp;
+  private Integer sent;
 
   public SubmissionForm() {
   }
 
   public SubmissionForm(Integer id, Integer status, Integer questionId, String question, Integer answerId,
-      String answer, Integer gdprId, String option, Long timeStamp) {
+      String answer, Integer gdprId, String option, Long timeStamp, Integer sent) {
     this.id = id;
     this.status = status;
     this.questionId = questionId;
@@ -28,6 +29,7 @@ public class SubmissionForm {
     this.gdprId = gdprId;
     this.option = option;
     this.timeStamp = timeStamp;
+    this.sent = sent;
   }
 
   public Integer getId() {
@@ -87,12 +89,13 @@ public class SubmissionForm {
         Objects.equals(answer, that.answer) &&
         Objects.equals(gdprId, that.gdprId) &&
         Objects.equals(option, that.option) &&
-        Objects.equals(timeStamp, that.timeStamp);
+        Objects.equals(timeStamp, that.timeStamp) &&
+        Objects.equals(sent, that.sent);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, status, questionId, question, answerId, answer, gdprId, option, timeStamp);
+    return Objects.hash(id, status, questionId, question, answerId, answer, gdprId, option, timeStamp, sent);
   }
 
   @Override
@@ -107,6 +110,7 @@ public class SubmissionForm {
         ", gdprId=" + gdprId +
         ", option='" + option + '\'' +
         ", timeStamp=" + timeStamp +
+        ", sent=" + sent +
         '}';
   }
 }

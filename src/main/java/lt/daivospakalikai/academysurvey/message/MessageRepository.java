@@ -80,12 +80,6 @@ public class MessageRepository {
         return rs.getString(1);
       }
     }).get(0);
-//    return jdbcTemplate.query(query, new PreparedStatementSetter() {
-//      @Override
-//      public void setValues(PreparedStatement ps) throws SQLException {
-//        ps.setInt(1, messageId);
-//      }
-//    }, new MessageOutboxRowMapper()).get(0).getReplay();
   }
 
 
