@@ -46,7 +46,7 @@ public class SubmissionRepository {
         + "s.gdpr_id as gid, q.option\n"
         + "FROM survey s, answer a, question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id"
-        + " order by s.id desc, a.answer asc";
+        + " order by s.id desc, a.id asc";
     return jdbcTemplate.query(query, new SubmissionFormRowMapper());
   }
 
