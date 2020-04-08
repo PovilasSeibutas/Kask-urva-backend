@@ -12,7 +12,9 @@ public class MessageOutboxRowMapper implements RowMapper<MessageOutbox> {
         rs.getInt("id"),
         rs.getString("replay"),
         rs.getInt("message_id"),
-        rs.getInt("admin_id")
+        rs.getInt("admin_id"),
+        rs.getString("name"),
+        rs.getString("surname")
     );
   }
 }

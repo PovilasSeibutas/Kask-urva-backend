@@ -35,7 +35,11 @@ public class MessageRepository {
   }
 
   public List<MessageOutbox> getAllReplays() {
-    return jdbcTemplate.query("SELECT * FROM message_outbox", new MessageOutboxRowMapper());
+    String query =
+        "SELECT m.*, a.name, a.surname\n"
+            + "FROM u415003994_heroku.message_outbox m, u415003994_heroku.admin a\n"
+            + "WHERE a.id = m.admin_id";
+    return jdbcTemplate.query(query, new MessageOutboxRowMapper());
   }
 
   public void replay(final MessageOutbox messageOutbox) {
