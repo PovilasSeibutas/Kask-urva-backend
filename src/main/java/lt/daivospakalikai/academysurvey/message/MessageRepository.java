@@ -1,12 +1,14 @@
 package lt.daivospakalikai.academysurvey.message;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,7 +39,7 @@ public class MessageRepository {
   public List<MessageOutbox> getAllReplays() {
     String query =
         "SELECT m.*, a.name, a.surname\n"
-            + "FROM u415003994_heroku.message_outbox m, u415003994_heroku.admin a\n"
+            + "FROM message_outbox m, admin a\n"
             + "WHERE a.id = m.admin_id";
     return jdbcTemplate.query(query, new MessageOutboxRowMapper());
   }
@@ -66,13 +68,24 @@ public class MessageRepository {
   }
 
   public String getMessageText(final Integer messageId) {
-    String query = "SELECT * FROM message_outbox WHERE message_id = ? ";
+    String query = "SELECT replay FROM message_outbox WHERE message_id = ? ";
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
         ps.setInt(1, messageId);
       }
-    }, new MessageOutboxRowMapper()).get(0).getReplay();
+    }, new RowMapper<String>() {
+      @Override
+      public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return rs.getString(1);
+      }
+    }).get(0);
+//    return jdbcTemplate.query(query, new PreparedStatementSetter() {
+//      @Override
+//      public void setValues(PreparedStatement ps) throws SQLException {
+//        ps.setInt(1, messageId);
+//      }
+//    }, new MessageOutboxRowMapper()).get(0).getReplay();
   }
 
 

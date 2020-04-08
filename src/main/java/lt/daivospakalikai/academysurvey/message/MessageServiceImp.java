@@ -34,7 +34,7 @@ public class MessageServiceImp implements MessageService {
   @Override
   public void replay(MessageOutbox messageOutbox) throws Exception {
     try {
-    messageRepository.replay(messageOutbox);
+      messageRepository.replay(messageOutbox);
       String[] email = {messageRepository.getUsersEmail(messageOutbox.getMessageId())};
       String message = messageRepository.getMessageText(messageOutbox.getMessageId());
       emailService.sendEmail(email, subject, message);
