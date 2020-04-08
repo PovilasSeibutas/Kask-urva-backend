@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
+import lt.daivospakalikai.academysurvey.exception.CustomExceptionTranslator;
 import lt.daivospakalikai.academysurvey.filterandsort.AnswerForm;
 import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class SubmissionRepository {
         + "s.gdpr_id as gid, q.option\n"
         + "FROM survey s, answer a, question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id"
-        + " order by s.id desc";
+        + " order by s.id desc, a.answer asc";
     return jdbcTemplate.query(query, new SubmissionFormRowMapper());
   }
 
@@ -133,10 +134,10 @@ public class SubmissionRepository {
         && submissionFilter.getAnswerForm().getQuestionId() != null) {
       if (submissionFilter.getAnswerForm().getFormat().equals("=")) {
         havingId = new StringBuilder().append(havingId).append(
-            " AND q.id = ? AND a.answer = ? ").toString();
+            " AND q.id = ? AND LOWER(a.answer) = LOWER(?)").toString();
       } else if (submissionFilter.getAnswerForm().getFormat().equals("?")) {
         havingId = new StringBuilder().append(havingId).append(
-            " AND q.id = ? AND a.answer LIKE ?").toString();
+            " AND q.id = ? AND LOWER(a.answer) LIKE LOWER(?)").toString();
       }
     }
     String query =
@@ -164,7 +165,6 @@ public class SubmissionRepository {
           } else {
             ps.setString(2, answerForm.getAnswer());
           }
-          System.out.println(ps.toString());
         }
       }, new SubmissionFormRowMapper());
     } else {
