@@ -24,7 +24,7 @@ public class SubmissionServiceImp implements SubmissionService {
 
   @Override
   public List<Submission> getAllSubmissions() {
-    Map<Integer, Submission> submissionMap = new TreeMap<>();
+    Map<Integer, Submission> submissionMap = new LinkedHashMap<>();
     return getDataFromDB(submissionMap, submissionRepository.getAll());
   }
 
@@ -37,18 +37,6 @@ public class SubmissionServiceImp implements SubmissionService {
   @Override
   public void updateSubmissionStatus(SubmissionStatus submissionStatus) {
     submissionRepository.updateSubmissionStatus(submissionStatus);
-  }
-
-  @Override
-  public List<Submission> sortSubmissionsByNameAZ() {
-    Map<Integer, Submission> submissionMap = new LinkedHashMap<>();
-    return getDataFromDB(submissionMap, submissionRepository.sortSubmissionsByNameAZ());
-  }
-
-  @Override
-  public List<Submission> sortSubmissionsByNameZA() {
-    Map<Integer, Submission> submissionMap = new LinkedHashMap<>();
-    return getDataFromDB(submissionMap, submissionRepository.sortSubmissionsByNameZA());
   }
 
   @Override
@@ -69,8 +57,8 @@ public class SubmissionServiceImp implements SubmissionService {
   }
 
   @Override
-  public void deleteSubmissionByDate(List<Long> timeStampList) {
-    submissionRepository.deleteSubmissionsByDate(timeStampList);
+  public Integer deleteSubmissionByDate(List<Long> timeStampList) {
+    return submissionRepository.deleteSubmissionsByDate(timeStampList);
   }
 
   private ArrayList<Submission> getDataFromDB(Map<Integer, Submission> map,

@@ -58,20 +58,8 @@ public class SubmissionController {
   }
 
   @DeleteMapping("/deleteByDate")
-  public void deleteSubmissionsByDate(@RequestBody List<Long> timeStampList) {
-    submissionService.deleteSubmissionByDate(timeStampList);
-  }
-
-  @GetMapping("/sorted-submissions-az")
-  public ResponseEntity<List<Submission>> getSortSubmissionsByNameAZ() {
-    List<Submission> submissionList = submissionService.sortSubmissionsByNameAZ();
-    return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
-  }
-
-  @GetMapping("/sorted-submissions-za")
-  public ResponseEntity<List<Submission>> getSortSubmissionsByNameZA() {
-    List<Submission> submissionList = submissionService.sortSubmissionsByNameZA();
-    return new ResponseEntity<List<Submission>>(submissionList, HttpStatus.OK);
+  public Integer deleteSubmissionsByDate(@RequestBody List<Long> timeStampList) {
+    return submissionService.deleteSubmissionByDate(timeStampList);
   }
 
   //for testing purposes

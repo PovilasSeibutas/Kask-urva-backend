@@ -4,19 +4,19 @@ import java.util.List;
 
 public class SubmissionFilter {
 
-  private List<String> filterList;
   private List<String> sortList;
+  private AnswerForm answerForm;
 
-  public SubmissionFilter(List<String> filterList, List<String> sortList) {
-    this.filterList = filterList;
+  public SubmissionFilter(List<String> sortList, AnswerForm answerForm) {
     this.sortList = sortList;
-  }
-
-  public List<String> getFilterList() {
-    return filterList;
+    this.answerForm = answerForm;
   }
 
   public List<String> getSortList() {
     return sortList;
+  }
+
+  public AnswerForm getAnswerForm() {
+    return answerForm;
   }
 }
