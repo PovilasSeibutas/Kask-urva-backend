@@ -6,13 +6,21 @@ public class MessageOutbox {
   private String replay;
   private Integer messageId;
   private Integer adminId;
+  private String name;
+  private String surname;
 
 
-  public MessageOutbox(Integer id, String replay, Integer messageId, Integer adminId) {
+  public MessageOutbox() {
+  }
+
+  public MessageOutbox(Integer id, String replay, Integer messageId, Integer adminId, String name,
+      String surname) {
     this.id = id;
     this.replay = replay;
     this.messageId = messageId;
     this.adminId = adminId;
+    this.name = name;
+    this.surname = surname;
   }
 
   public Integer getId() {
@@ -29,5 +37,13 @@ public class MessageOutbox {
 
   public Integer getAdminId() {
     return adminId;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getSurname() {
+    return surname;
   }
 }
