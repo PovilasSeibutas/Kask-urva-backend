@@ -69,7 +69,7 @@ public class SubmissionServiceImp implements SubmissionService {
             .add(s.createNewAnswer());
       } else {
         map.put(s.getId(),
-            new Submission(s.getId(), s.getStatus(), s.getGdprId(), s.getTimeStamp(),
+            new Submission(s.getId(), s.getStatus(), s.getGdprId(), s.getTimeStamp(), s.getSent(),
                 new ArrayList(Arrays.asList(s.createNewAnswer()))
                 , null));
       }

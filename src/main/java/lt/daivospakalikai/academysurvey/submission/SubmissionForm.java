@@ -68,6 +68,10 @@ public class SubmissionForm {
     return timeStamp;
   }
 
+  public Integer getSent() {
+    return sent;
+  }
+
   public Answer createNewAnswer() {
     return new Answer(getQuestionId(), getQuestion(), getAnswerId(), getAnswer(), getOption());
   }
