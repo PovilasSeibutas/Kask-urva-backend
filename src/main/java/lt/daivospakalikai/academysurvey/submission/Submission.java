@@ -11,18 +11,20 @@ public class Submission {
   private Integer status;
   private Integer gdprId;
   private Long timeStamp;
+  private Integer sent;
   private List<Answer> answers;
   private String recaptchaToken;
 
   public Submission() {
   }
 
-  public Submission(Integer id, Integer status, Integer gdprId, Long timeStamp,
+  public Submission(Integer id, Integer status, Integer gdprId, Long timeStamp, Integer sent,
       List<Answer> answers, String recaptchaToken) {
     this.id = id;
     this.status = status;
     this.gdprId = gdprId;
     this.timeStamp = timeStamp;
+    this.sent = sent;
     this.answers = answers;
     this.recaptchaToken = recaptchaToken;
   }
@@ -51,6 +53,10 @@ public class Submission {
     return timeStamp;
   }
 
+  public Integer getSent() {
+    return sent;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -64,13 +70,14 @@ public class Submission {
         Objects.equals(status, that.status) &&
         Objects.equals(gdprId, that.gdprId) &&
         Objects.equals(timeStamp, that.timeStamp) &&
+        Objects.equals(sent, that.sent) &&
         Objects.equals(answers, that.answers) &&
         Objects.equals(recaptchaToken, that.recaptchaToken);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, status, gdprId, timeStamp, answers, recaptchaToken);
+    return Objects.hash(id, status, gdprId, timeStamp, sent, answers, recaptchaToken);
   }
 
   @Override
@@ -80,6 +87,7 @@ public class Submission {
         ", status=" + status +
         ", gdprId=" + gdprId +
         ", timeStamp=" + timeStamp +
+        ", sent=" + sent +
         ", answers=" + answers +
         ", recaptchaToken='" + recaptchaToken + '\'' +
         '}';
