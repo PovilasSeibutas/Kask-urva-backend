@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
+import lt.daivospakalikai.academysurvey.exception.CustomExceptionTranslator;
 import lt.daivospakalikai.academysurvey.filterandsort.AnswerForm;
 import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class SubmissionRepository {
         + "s.gdpr_id as gid, q.option\n"
         + "FROM survey s, answer a, question q\n"
         + "WHERE s.id = a.survey_id AND q.id = a.question_id"
-        + " order by s.id desc, a.id asc";
+        + " order by s.id desc, q.id asc";
     return jdbcTemplate.query(query, new SubmissionFormRowMapper());
   }
 
