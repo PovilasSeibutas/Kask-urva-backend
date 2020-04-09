@@ -42,18 +42,11 @@ public class SubmissionRepository {
 
   public List<SubmissionForm> getAll() {
     String query =
-        "SELECT s.id as sid, s.status, s.time_stamp, s.sent, q.id as qid, q.ord as option_id, q.question, a"
-            + ".id as aid,"
-            + " a.answer, s.gdpr_id as gid, q.option\n"
-            + "FROM survey s, answer a, \n"
-            + "(SELECT *\n"
-            + "FROM question q1\n"
-            + "INNER JOIN \n"
-            + "(SELECT id as id2, CAST(JSON_VALUE(REPLACE(`option`, '''', '\"'), '$.order') AS UNSIGNED) as ord FROM question\n"
-            + "order by ord asc) q2\n"
-            + " ON q1.id = q2.id2) q\n"
-            + "WHERE s.id = a.survey_id AND q.id = a.question_id\n"
-            + "order by s.id desc, option_id asc";
+        "SELECT s.id as sid, s.status, s.time_stamp, s.sent, q.id as qid, q.ord as option_id, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option"
+            + "FROM survey s, answer a,"
+            + "(SELECT * FROM question q1 INNER JOIN "
+            + "(SELECT id as id2, CAST(JSON_VALUE(REPLACE(`option`, '''', '\"'), '$.order') AS UNSIGNED) as ord FROM question order by ord asc) q2 ON q1.id = q2.id2) q"
+            + "WHERE s.id = a.survey_id AND q.id = a.question_id order by s.id desc, option_id asc";
     return jdbcTemplate.query(query, new SubmissionFormRowMapper());
   }
 
@@ -89,16 +82,11 @@ public class SubmissionRepository {
 
   public List<SubmissionForm> getSubmissionById(Integer id) {
     String query =
-        "SELECT s.id as sid, s.status, s.time_stamp, s.sent, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option\n"
-            + "FROM survey s, answer a\n"
-            + "(SELECT *\n"
-            + "FROM question q1\n"
-            + "INNER JOIN \n"
-            + "(SELECT id as id2, CAST(JSON_VALUE(REPLACE(`option`, '''', '\"'), '$.order') AS UNSIGNED) as ord FROM question\n"
-            + "order by ord asc) q2\n"
-            + " ON q1.id = q2.id2) q\n"
-            + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = ? "
-            + "option_id asc\"";
+        "SELECT s.id as sid, s.status, s.time_stamp, s.sent, q.id as qid, q.question, a.id as aid, a.answer, s.gdpr_id as gid, q.option"
+            + "FROM survey s, answer a"
+            + "(SELECT * FROM question q1 INNER JOIN"
+            + "(SELECT id as id2, CAST(JSON_VALUE(REPLACE(`option`, '''', '\"'), '$.order') AS UNSIGNED) as ord FROM question order by ord asc) q2 ON q1.id = q2.id2) q"
+            + "WHERE s.id = a.survey_id AND q.id = a.question_id AND s.id = ? order by s.id desc, option_id asc";
     return jdbcTemplate.query(query, new PreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps) throws SQLException {
