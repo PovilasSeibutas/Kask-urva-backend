@@ -8,9 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
+import lt.daivospakalikai.academysurvey.exception.CustomExceptionTranslator;
+import lt.daivospakalikai.academysurvey.exception.InvalidRequestException;
+import lt.daivospakalikai.academysurvey.exception.NotNullFieldException;
 import lt.daivospakalikai.academysurvey.filterandsort.AnswerForm;
 import lt.daivospakalikai.academysurvey.filterandsort.SubmissionFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -23,6 +29,8 @@ public class SubmissionRepository {
   private Map<String, String> sortFilterMap;
   @Autowired
   SubmissionService submissionService;
+
+  private static Logger log = LoggerFactory.getLogger(SubmissionController.class);
 
   @Autowired
   public SubmissionRepository(final DataSource dataSource) {
@@ -37,6 +45,8 @@ public class SubmissionRepository {
     sortFilterMap.put("option", "q.option");
     sortFilterMap.put("timeStamp", "s.time_stamp");
     sortFilterMap.put("sent", "s.sent");
+    CustomExceptionTranslator customTranslator = new CustomExceptionTranslator();
+    jdbcTemplate.setExceptionTranslator(customTranslator);
 
   }
 
@@ -60,31 +70,46 @@ public class SubmissionRepository {
   public void saveSubmissions(final List<Answer> answerList, Integer newSurveyId) {
     String query =
         "INSERT INTO answer (answer, question_id, survey_id) VALUES (?, ?, ?)";
-    jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
-      @Override
-      public void setValues(PreparedStatement ps, int i) throws SQLException {
-        ps.setString(1, answerList.get(i).getAnswer());
-        ps.setInt(2, Integer.valueOf(answerList.get(i).getQuestionId()));
-        ps.setInt(3, Integer.valueOf(newSurveyId));
-      }
+    try {
+      jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
+        @Override
+        public void setValues(PreparedStatement ps, int i) throws SQLException {
+          ps.setString(1, answerList.get(i).getAnswer());
+          ps.setInt(2, Integer.valueOf(answerList.get(i).getQuestionId()));
+          ps.setInt(3, Integer.valueOf(newSurveyId));
+        }
 
-      @Override
-      public int getBatchSize() {
-        return answerList.size();
-      }
-    });
+        @Override
+        public int getBatchSize() {
+          return answerList.size();
+        }
+      });
+    } catch (NullPointerException e) {
+      log.error("saveSubmissions: FK is not provided ", e);
+      throw new NotNullFieldException("Required field is not provided");
+    }
   }
 
   public void updateSubmissionStatus(final SubmissionStatus submissionStatus) {
     String query = "UPDATE survey SET status = ?, admin_id = ? WHERE (id = ?)";
-    jdbcTemplate.update(query, new PreparedStatementSetter() {
-      @Override
-      public void setValues(PreparedStatement ps) throws SQLException {
-        ps.setInt(1, submissionStatus.getStatus());
-        ps.setInt(2, submissionStatus.getAdminId());
-        ps.setInt(3, submissionStatus.getSurveyId());
-      }
-    });
+    Integer i = 0;
+    try {
+      i = jdbcTemplate.update(query, new PreparedStatementSetter() {
+        @Override
+        public void setValues(PreparedStatement ps) throws SQLException {
+          ps.setInt(1, submissionStatus.getStatus());
+          ps.setInt(2, submissionStatus.getAdminId());
+          ps.setInt(3, submissionStatus.getSurveyId());
+        }
+      });
+    } catch (NullPointerException e) {
+      log.error("updateSubmissionStatus: one of fields is null ", e);
+      throw new NotNullFieldException("Required field is not provided");
+    }
+    if (i == 0){
+      log.error("updateSubmissionStatus: not present row is requested");
+      throw new InvalidRequestException("Cannot update requested object");
+    }
   }
 
   public List<SubmissionForm> getSubmissionById(Integer id) {
