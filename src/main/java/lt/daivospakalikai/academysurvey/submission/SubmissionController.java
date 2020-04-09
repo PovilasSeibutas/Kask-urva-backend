@@ -63,10 +63,10 @@ public class SubmissionController {
   }
 
   //for testing purposes
-  @GetMapping("/{id}")
-  public Submission getSubmissionById(@PathVariable Integer id) {
-    return submissionService.getSubmissionById(id);
-  }
+//  @GetMapping("/{id}")
+//  public Submission getSubmissionById(@PathVariable Integer id) {
+//    return submissionService.getSubmissionById(id);
+//  }
 
   @PostMapping("/filter")
   public List<Submission> filterAndSortSubmissions(@RequestBody SubmissionFilter submissionFilter) {
