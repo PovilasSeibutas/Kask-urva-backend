@@ -131,7 +131,7 @@ public class SubmissionRepository {
         @Override
         public void setValues(PreparedStatement ps) throws SQLException {
           ps.setLong(1, timeStampList.get(0));
-          ps.setLong(2, timeStampList.get(1));
+          ps.setLong(2, timeStampList.get(1) + (3600*24));
         }
       });
     } else {
